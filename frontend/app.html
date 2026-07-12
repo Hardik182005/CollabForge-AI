@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CollabForge AI — Workspace</title>
+  <meta name="description" content="CollabForge AI workspace — Creator Studio and Brand Intelligence, one shell, live evidence.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/typography.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/tables.css">
+  <link rel="stylesheet" href="css/states.css">
+  <link rel="stylesheet" href="css/pipeline.css">
+  <link rel="stylesheet" href="css/shell.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="shell">
+    <div class="sidebar__scrim" id="sb-scrim"></div>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__brand">
+        <svg class="logo-mark" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" aria-hidden="true">
+          <circle cx="50" cy="50" r="16"/><circle cx="50" cy="26" r="10" opacity="0.5"/>
+          <circle cx="72" cy="62" r="10" opacity="0.5"/><circle cx="28" cy="62" r="10" opacity="0.5"/>
+        </svg>
+        <a href="index.html" class="sidebar__brand-name">CollabForge AI</a>
+      </div>
+      <div class="ws-switch" id="ws-switch">
+        <button data-ws="creator">Creator Studio</button>
+        <button data-ws="brand">Brand Intelligence</button>
+      </div>
+      <nav class="sidebar__nav" id="sidebar-nav"></nav>
+      <div class="sidebar__foot">
+        <div class="cf-live" id="sys-status"><span class="cf-live__dot"></span><span>Checking sources…</span></div>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div style="display:flex;align-items:center;gap:var(--space-3)">
+          <button class="btn btn--ghost btn--sm mobile-menu-btn" id="mobile-menu" aria-label="Open navigation menu">☰</button>
+          <div class="topbar__title">
+            <span class="topbar__crumb" id="crumb">Brand Intelligence</span>
+            <h1 id="view-title">Discover Creators</h1>
+          </div>
+        </div>
+        <div class="topbar__actions">
+          <a class="btn btn--ghost btn--sm" href="index.html">Home</a>
+          <a class="btn btn--primary btn--sm" id="topbar-cta" href="app.html?workspace=brand&view=autopilot">Run Autopilot</a>
+        </div>
+      </header>
+      <div id="view-root"></div>
+    </main>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="js/core/formatters.js"></script>
+  <script src="js/core/events.js"></script>
+  <script src="js/core/storage.js"></script>
+  <script src="js/core/api-client.js"></script>
+  <script src="js/core/app-state.js"></script>
+  <script src="js/core/capabilities.js"></script>
+  <script src="js/core/ui-feedback.js"></script>
+  <script src="js/core/router.js"></script>
+  <script src="js/components/anakin-pipeline.js"></script>
+  <script src="js/components/chat-orb.js"></script>
+  <script src="js/views/common.js"></script>
+  <script src="js/views/creator.js"></script>
+  <script src="js/views/brand.js"></script>
+  <script src="js/views/autopilot.js"></script>
+  <script src="js/shell.js"></script>
+</body>
+</html>

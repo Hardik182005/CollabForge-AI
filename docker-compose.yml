@@ -1,0 +1,26 @@
+version: '3.8'
+
+# CollabForge AI — local development stack
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: collabforge_backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - backend/.env
+    environment:
+      - APP_ENV=development
+      - DATABASE_MODE=local
+    restart: unless-stopped
+
+  frontend:
+    image: nginx:alpine
+    container_name: collabforge_frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    restart: unless-stopped
