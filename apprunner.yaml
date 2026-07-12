@@ -1,0 +1,16 @@
+# AWS App Runner configuration (used with source-based deploys; the primary
+# deployment path is the ECR image built from ./Dockerfile via
+# scripts/deploy_backend_aws.*).
+version: 1.0
+runtime: python311
+build:
+  commands:
+    build:
+      - pip install -r backend/requirements.txt
+run:
+  command: sh -c "cd backend && uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}"
+  network:
+    port: 8080
+  env:
+    - name: APP_ENV
+      value: production

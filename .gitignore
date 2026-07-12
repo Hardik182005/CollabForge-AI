@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Environment
+.env
+.env.local
+keyss.txt
+
+# Database
+*.db
+*.sqlite3
+
+# Mac
+.DS_Store
+__MACOSX/
+
+# Node
+node_modules/
+.firebase/
+.firebaserc
+
+# Build
+dist/
+build/
+*.log
+
+# Deploy artifacts
+deploy_log*.txt
+backend/_fulltest.py
+
+# Secrets and local artifacts
+keysssss.txt
+*.zip
+scratch/
+data/local/
+
+.frontend_build/
+.git_temp/
+
