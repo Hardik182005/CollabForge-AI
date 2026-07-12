@@ -30,6 +30,14 @@
 ![API](https://img.shields.io/badge/API_contract-37%2F37-16a34a)
 ![No Fake Data](https://img.shields.io/badge/synthetic_data-none-16a34a)
 
+<br/>
+
+### 🎥 [▶️ WATCH THE VIDEO DEMO](https://youtu.be/oyJnl0eKHLY)
+
+[![▶️ Watch the Video Demo](https://img.shields.io/badge/▶️_WATCH_THE_VIDEO_DEMO-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/oyJnl0eKHLY)
+
+**🔗 https://youtu.be/oyJnl0eKHLY**
+
 </div>
 
 ---
@@ -47,6 +55,12 @@
 | 🤖 Collab Autopilot | https://d2l3jsjzyhefqq.cloudfront.net/app.html?workspace=brand&view=autopilot |
 
 > **Region:** `eu-west-1` · **Backend:** ECS Fargate behind an ALB, fronted same-origin by CloudFront (`/api/*` → ALB). `/health` returns `{"status":"ok"}`.
+
+---
+
+## 🎥 Video Demo
+
+▶️ **[Watch the demo](https://youtu.be/oyJnl0eKHLY)** — https://youtu.be/oyJnl0eKHLY
 
 ---
 
