@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🚀 CollabForge AI
+# CollabForge AI
 
 ### **Research. Score. Create. Close.**
 
