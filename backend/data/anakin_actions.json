@@ -1,0 +1,1090 @@
+{
+  "generated_at": "2026-07-11",
+  "source": "GET https://api.anakin.io/v1/wire/catalog/{slug} (live)",
+  "catalogs": {
+    "youtube": [
+      {
+        "action_id": "yt_channel",
+        "name": "Channel Info",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "channel_id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "description": "Returns channel details including name, description, avatar, banner, and keywords.",
+        "tested": "submitted OK, execution failed server-side at audit"
+      },
+      {
+        "action_id": "yt_related",
+        "name": "Related Videos",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "video_id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "description": "Returns recommended up next videos for a given video.",
+        "tested": "submitted OK, execution failed server-side at audit"
+      },
+      {
+        "action_id": "yt_suggestions",
+        "name": "Search Suggestions",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "query",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "description": "Returns search autocomplete suggestions for a partial query.",
+        "tested": "submitted OK, execution failed server-side at audit"
+      },
+      {
+        "action_id": "yt_comments",
+        "name": "Video Comments",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 3,
+        "parameters": [
+          {
+            "name": "video_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "include_replies",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "name": "sort",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "description": "Returns video comments with optional reply walking, up to 10,000 comments.",
+        "tested": "submitted OK, execution failed server-side at audit"
+      },
+      {
+        "action_id": "yt_video",
+        "name": "Video Details",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "video_id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "description": "Returns full video details including title, author, views, duration, description, tags, and thumbnail.",
+        "tested": "submitted OK, execution failed server-side at audit"
+      },
+      {
+        "action_id": "yt_search",
+        "name": "Video Search",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns videos matching a query with title, channel, views, duration, and thumbnail.",
+        "tested": "submitted OK, execution failed server-side at audit"
+      }
+    ],
+    "reddit": [
+      {
+        "action_id": "rt_popular_subreddits",
+        "name": "Popular Subreddits",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "after",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "description": "Returns the most popular subreddits from the public RSS feed.",
+        "tested": "submitted OK, execution failed server-side at audit"
+      },
+      {
+        "action_id": "rt_post_details",
+        "name": "Post Details",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "post_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "subreddit",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "comment_limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns a full post with its comments via the public RSS feed.",
+        "tested": "submitted OK, execution failed server-side at audit"
+      },
+      {
+        "action_id": "rt_search",
+        "name": "Post Search",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "sort",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "time",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "after",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "description": "Returns posts matching a keyword across all subreddits via the public RSS feed.",
+        "tested": "submitted OK, execution failed server-side at audit"
+      },
+      {
+        "action_id": "rt_subreddit_info",
+        "name": "Subreddit Info",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "subreddit",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "description": "Returns subreddit metadata from the RSS feed channel headers.",
+        "tested": "submitted OK, execution failed server-side at audit"
+      },
+      {
+        "action_id": "rt_subreddit_posts",
+        "name": "Subreddit Posts",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "subreddit",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "sort",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "time",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "after",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "description": "Returns posts from a specific subreddit via the public RSS feed.",
+        "tested": "submitted OK, execution failed server-side at audit"
+      },
+      {
+        "action_id": "rt_search_subreddits",
+        "name": "Subreddit Search",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "after",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "description": "Returns subreddits matching a topic via the public RSS feed.",
+        "tested": "submitted OK, execution failed server-side at audit"
+      },
+      {
+        "action_id": "rt_user_profile",
+        "name": "User Profile",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "username",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "include_posts",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "name": "include_comments",
+            "type": "boolean",
+            "required": false
+          },
+          {
+            "name": "posts_limit",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "comments_limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns a user bio plus optional recent posts and comments via the public RSS feeds.",
+        "tested": "submitted OK, execution failed server-side at audit"
+      }
+    ],
+    "google_news": [
+      {
+        "action_id": "gn_article",
+        "name": "Article Content",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "url",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "description": "Returns the full text, author, publish date, and metadata of a news article from its URL.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "gn_local",
+        "name": "Local News",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 3,
+        "parameters": [
+          {
+            "name": "location",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "country",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "language",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns news articles for a city, state, or region with country and language filtering.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "gn_search",
+        "name": "News Search",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "when",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "after",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "before",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "country",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "language",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns news articles matching a keyword query with time, country, and language filters.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "gn_source",
+        "name": "Publisher Articles",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "domain",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "when",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "country",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "language",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns recent news articles from a specific publisher domain with optional time filtering.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "gn_related",
+        "name": "Related Coverage",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "when",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "country",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "language",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns related news coverage for a topic grouped by story with cross-source variants.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "gn_top_stories",
+        "name": "Top Stories",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "country",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "language",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns the current top headlines for a country and language with related coverage.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "gn_topic",
+        "name": "Topic News",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 3,
+        "parameters": [
+          {
+            "name": "topic",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "country",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "language",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns news articles for a topic category with 25 plus sub-topics.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "gn_trending",
+        "name": "Trending Stories",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "country",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns currently trending stories with estimated search traffic and related articles.",
+        "tested": "catalog verified, not executed"
+      }
+    ],
+    "google_trends": [
+      {
+        "action_id": "gt_categories",
+        "name": "Category List",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [],
+        "description": "Returns the full Google Trends category tree with over 1000 categories and IDs.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "gt_interest_over_time",
+        "name": "Interest Over Time",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 3,
+        "parameters": [
+          {
+            "name": "keyword",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "geo",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "timeframe",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "category",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "property",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "description": "Returns the search volume index from 0 to 100 for a keyword over time.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "gt_interest_by_region",
+        "name": "Interest by Region",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "keyword",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "geo",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "timeframe",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "resolution",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "description": "Returns regional search interest by country, state, DMA, or city.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "gt_compare",
+        "name": "Keyword Comparison",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 3,
+        "parameters": [
+          {
+            "name": "keywords",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "geo",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "timeframe",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "description": "Returns side-by-side search interest comparison for up to five keywords over time.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "gt_suggestions",
+        "name": "Keyword Suggestions",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 3,
+        "parameters": [
+          {
+            "name": "keyword",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "description": "Returns keyword suggestions and autocomplete with topic entity IDs and types.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "gt_related_queries",
+        "name": "Related Queries",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 3,
+        "parameters": [
+          {
+            "name": "keyword",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "geo",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "timeframe",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "description": "Returns top and rising related search queries for a keyword.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "gt_trending",
+        "name": "Trending Searches",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "geo",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns currently trending searches with traffic estimates, images, and related news.",
+        "tested": "catalog verified, not executed"
+      }
+    ],
+    "amazon": [
+      {
+        "action_id": "am_add_to_cart",
+        "name": "Add to Cart",
+        "type": "write",
+        "mode": "async",
+        "auth_required": true,
+        "credits_per_call": 5,
+        "parameters": [
+          {
+            "name": "asin",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "quantity",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Adds a product to the cart by ASIN and returns the result. Requires an authenticated session.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "am_bestsellers",
+        "name": "Bestsellers",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "category",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns top-ranked bestselling products in a category with prices and ratings.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "am_categories",
+        "name": "Categories",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [],
+        "description": "Returns the department tree with top-level departments and subcategories.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "act_amazon_category_navigation_menu",
+        "name": "Category Navigation Menu",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "hash_customer_and_session_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "country_code",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "description": "Returns top-level navigation menu departments with titles and sections.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "act_amazon_category_navigation_submenu",
+        "name": "Category Navigation Submenu",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "hash_customer_and_session_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "second_layer_tree",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "country_code",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "description": "Returns a department's submenu subcategories with titles, links, and node IDs.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "am_deals",
+        "name": "Deals",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns today's deals with titles, prices, discounts, and deal types.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "act_amazon_homepage_gateway_ssr",
+        "name": "Homepage Gateway",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [],
+        "description": "Returns homepage product tiles with titles, images, and links.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "am_product_details",
+        "name": "Product Details",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "asin",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "description": "Returns full product detail including price, rating, features, images, and seller.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "act_amazon_product_listing",
+        "name": "Product Listing",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 2,
+        "parameters": [
+          {
+            "name": "bbn",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "rh",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "ref_",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "description": "Returns products in a browse category with titles, prices, ratings, and sponsored flags.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "am_product_offers",
+        "name": "Product Offers",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "asin",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "condition",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "description": "Returns all seller offers for a product with prices, conditions, and sellers.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "am_product_reviews",
+        "name": "Product Reviews",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "asin",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "description": "Returns top product reviews with ratings, authors, dates, and helpful votes.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "am_search_products",
+        "name": "Search Products",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "page",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "sort",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "description": "Returns keyword search results with titles, prices, ratings, and sort options.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "am_search_suggestions",
+        "name": "Search Suggestions",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns search autocomplete suggestions for a partial query.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "am_seller_products",
+        "name": "Seller Products",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "seller_id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "page",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "description": "Returns a seller's storefront products with titles, prices, and ratings.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "am_seller_profile",
+        "name": "Seller Profile",
+        "type": "read",
+        "mode": "async",
+        "auth_required": false,
+        "credits_per_call": 1,
+        "parameters": [
+          {
+            "name": "seller_id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "description": "Returns a seller's profile including name, description, business info, and feedback.",
+        "tested": "catalog verified, not executed"
+      },
+      {
+        "action_id": "am_view_cart",
+        "name": "View Cart",
+        "type": "read",
+        "mode": "async",
+        "auth_required": true,
+        "credits_per_call": 2,
+        "parameters": [],
+        "description": "Returns current cart contents with ASIN, title, price, quantity, and images. Requires an authenticated session.",
+        "tested": "catalog verified, not executed"
+      }
+    ]
+  }
+}
