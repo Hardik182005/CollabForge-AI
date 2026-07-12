@@ -1,0 +1,73 @@
+/* CollabForge AI — design tokens (single source of truth)
+   Editorial Creatrix identity: warm off-white canvas, deep navy surfaces,
+   muted powder-blue accent, controlled green for live. No purple. */
+:root {
+  /* ── Canvas & surfaces ── */
+  --color-canvas:        #F7F5F0;  /* warm off-white page */
+  --color-canvas-alt:    #FBFAF6;  /* raised warm panel */
+  --color-surface:       #FFFFFF;  /* cards */
+  --color-surface-dark:  #0E1A2B;  /* deep navy feature surfaces */
+  --color-sidebar:       #0B1626;  /* app shell rail */
+
+  /* ── Text ── */
+  --color-text-primary:   #141A22; /* near-black navy */
+  --color-text-secondary: #45505E;
+  --color-text-muted:     #7A8593;
+  --color-text-invert:    #EDF1F7; /* on dark surfaces */
+  --color-text-invert-dim:#9DB0C6;
+
+  /* ── Accent (powder / muted electric blue) ── */
+  --color-accent:        #3466D6;
+  --color-accent-strong: #244FB0;
+  --color-accent-soft:   #E7EEFB;
+  --color-accent-line:   #C6D6F4;
+  --color-accent-glow:   rgba(52, 102, 214, 0.28);
+
+  /* ── State ── */
+  --color-live:     #1E9E6A;   /* controlled green */
+  --color-live-soft:#E2F4EC;
+  --color-warning:  #C2811C;   /* amber */
+  --color-warning-soft:#F8EEDA;
+  --color-error:    #C33F2C;   /* red */
+  --color-error-soft:#F8E3DE;
+  --color-partial:  #B7791F;   /* amber-brown */
+
+  /* ── Lines ── */
+  --color-border:      #E6E1D7;
+  --color-border-soft: #EFEBE2;
+  --color-border-dark: rgba(237, 241, 247, 0.14);
+
+  /* ── Radii ── */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  /* ── Shadows ── */
+  --shadow-soft: 0 1px 2px rgba(20, 26, 34, 0.04), 0 4px 16px rgba(20, 26, 34, 0.05);
+  --shadow-elevated: 0 8px 30px rgba(20, 26, 34, 0.10), 0 2px 8px rgba(20, 26, 34, 0.06);
+
+  /* ── Spacing scale ── */
+  --space-1: 4px;   --space-2: 8px;   --space-3: 12px;  --space-4: 16px;
+  --space-5: 20px;  --space-6: 24px;  --space-7: 32px;  --space-8: 40px;
+  --space-9: 56px;  --space-10: 72px; --space-11: 96px; --space-12: 128px;
+
+  /* ── Type ── */
+  --font-display: "Fraunces", "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Inter", "DM Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --text-xs: 0.75rem; --text-sm: 0.875rem; --text-base: 1rem;
+  --text-lg: 1.125rem; --text-xl: 1.375rem; --text-2xl: 1.75rem;
+  --text-3xl: 2.375rem; --text-4xl: 3.25rem; --text-5xl: 4.25rem;
+
+  --lh-tight: 1.08; --lh-snug: 1.25; --lh-normal: 1.55;
+
+  /* ── Layout ── */
+  --shell-sidebar-w: 248px;
+  --content-max: 1180px;
+  --dotgrid: radial-gradient(circle, rgba(20,26,34,0.06) 1px, transparent 1px);
+  --dotgrid-dark: radial-gradient(circle, rgba(237,241,247,0.08) 1px, transparent 1px);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition: 220ms var(--ease-out);
+}

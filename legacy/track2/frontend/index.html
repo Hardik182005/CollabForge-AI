@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creatrix Studio — Viral content, reimagined.</title>
+  <meta name="description" content="Creatrix Studio is an AI Viral Reel Creator Agent. Discover live trends and generate reel scripts, LinkedIn posts, Instagram captions, AI images, and virality predictions in one click." />
+
+  <!-- Creatrix AI Google Fonts pairing (matches the existing site) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --blue: #4F8EF7;
+      --green: #3DD68C;
+      --amber: #F5A623;
+      --red: #F05252;
+      --purple: #A78BFA;
+      --dark-bg: #05091A;
+      --dark-card: #0C1229;
+      --steel: #5a80a8;
+      --steel-light: #90aacf;
+
+      --paper: #F6F4EF;        /* warm editorial light background */
+      --paper-2: #EFEBE3;
+      --ink: #14171F;
+      --ink-soft: #3A4150;
+      --muted: #6B7685;
+      --faint: #B9BEC8;
+      --line: #E2DED5;
+
+      --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--paper);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 40px; }
+
+    /* ── Subtle paper grain + faint dot grid ───────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: radial-gradient(rgba(20, 23, 31, 0.025) 1px, transparent 1px);
+      background-size: 26px 26px;
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       TOP NAV
+       ════════════════════════════════════════════════════════════════ */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(10px);
+      background: rgba(246, 244, 239, 0.78);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; }
+    .brand-mark {
+      width: 28px; height: 28px; color: var(--ink);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .brand:hover .brand-mark { transform: rotate(30deg); }
+    .brand-name {
+      font-size: 1.18rem; font-weight: 700; letter-spacing: -0.02em;
+    }
+    .brand-name span { font-family: var(--font-display); font-style: italic; font-weight: 500; }
+
+    .nav-links { display: flex; align-items: center; gap: 36px; }
+    .nav-link {
+      font-size: 0.92rem; color: var(--ink-soft); font-weight: 500;
+      position: relative; transition: color 0.25s;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; left: 0; bottom: -5px; height: 1.5px; width: 0;
+      background: var(--ink); transition: width 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .nav-link:hover { color: var(--ink); }
+    .nav-link:hover::after { width: 100%; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-family: var(--font-sans); font-size: 0.92rem; font-weight: 600;
+      cursor: pointer; border-radius: 8px; padding: 12px 22px;
+      transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), background 0.25s, box-shadow 0.25s, color 0.25s;
+      border: 1px solid transparent; white-space: nowrap;
+    }
+    .btn svg { width: 15px; height: 15px; transition: transform 0.3s ease; }
+    .btn:hover svg { transform: translateX(3px); }
+
+    .btn-solid {
+      background: var(--ink); color: var(--paper);
+      box-shadow: 0 6px 18px rgba(20, 23, 31, 0.18);
+    }
+    .btn-solid:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(20, 23, 31, 0.26); }
+
+    .btn-outline {
+      background: transparent; color: var(--ink); border-color: var(--ink);
+    }
+    .btn-outline:hover { background: var(--ink); color: var(--paper); transform: translateY(-2px); }
+
+    .btn-ghost {
+      background: rgba(20,23,31,0.04); color: var(--ink); border-color: var(--line);
+    }
+    .btn-ghost:hover { background: rgba(20,23,31,0.07); transform: translateY(-2px); }
+
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; }
+    .nav-toggle span { width: 22px; height: 1.6px; background: var(--ink); display: block; }
+
+    /* ════════════════════════════════════════════════════════════════
+       HERO
+       ════════════════════════════════════════════════════════════════ */
+    .hero { position: relative; z-index: 1; padding: 78px 0 96px; }
+    .hero-grid {
+      display: grid; grid-template-columns: 1.04fr 0.96fr; gap: 64px; align-items: center;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--steel); margin-bottom: 28px;
+    }
+    .eyebrow::before {
+      content: ''; width: 26px; height: 1.5px; background: var(--steel); opacity: 0.6;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: clamp(2.9rem, 6vw, 4.7rem);
+      line-height: 1.04; letter-spacing: -0.015em; color: var(--ink);
+      margin-bottom: 26px;
+    }
+    .hero-title i {
+      font-style: italic; font-weight: 400; color: var(--steel);
+    }
+    .hero-sub {
+      font-size: 1.1rem; line-height: 1.65; color: var(--ink-soft);
+      max-width: 520px; margin-bottom: 38px; font-weight: 400;
+    }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    .hero-meta {
+      display: flex; gap: 34px; margin-top: 46px; padding-top: 30px;
+      border-top: 1px solid var(--line);
+    }
+    .meta-item .meta-num {
+      font-family: var(--font-display); font-size: 1.7rem; font-weight: 600; color: var(--ink);
+      line-height: 1;
+    }
+    .meta-item .meta-lbl {
+      font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--muted); margin-top: 7px;
+    }
+
+    /* ── Dark studio mockup panel ──────────────────────────────────── */
+    .mock {
+      background: var(--dark-bg);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 40px 90px rgba(12, 18, 41, 0.34), 0 8px 24px rgba(12,18,41,0.2);
+      border: 1px solid rgba(255,255,255,0.06);
+      position: relative; overflow: hidden;
+    }
+    .mock::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 80% 60% at 80% 0%, rgba(79,142,247,0.16), transparent 60%);
+    }
+    .mock-bar { display: flex; align-items: center; gap: 7px; padding: 4px 6px 16px; position: relative; z-index: 2; }
+    .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mock-dot.r { background: #ff5f56; } .mock-dot.y { background: #ffbd2e; } .mock-dot.g { background: #27c93f; }
+    .mock-tablabel {
+      margin-left: 10px; font-family: var(--font-mono); font-size: 0.66rem;
+      color: rgba(255,255,255,0.4); letter-spacing: 0.04em;
+    }
+    .mock-badge {
+      margin-left: auto; font-family: var(--font-mono); font-size: 0.6rem;
+      color: var(--green); background: rgba(61,214,140,0.12); border: 1px solid rgba(61,214,140,0.3);
+      padding: 3px 9px; border-radius: 100px; display: inline-flex; align-items: center; gap: 5px;
+    }
+    .mock-badge .pulse { width: 5px; height: 5px; background: var(--green); border-radius: 50%; animation: pulse 1.8s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+    .mock-body { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .mock-card {
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px; padding: 14px;
+    }
+    .mock-card.wide { grid-column: 1 / -1; }
+    .mc-label {
+      font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 10px; display: flex; justify-content: space-between;
+    }
+    .mc-label .tiny { color: rgba(255,255,255,0.35); }
+
+    /* faux script lines */
+    .mc-pill {
+      display: inline-block; font-family: var(--font-mono); font-size: 0.55rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 4px; margin-bottom: 8px; letter-spacing: 0.04em;
+    }
+    .mc-pill.hook { background: rgba(245,166,35,0.18); color: var(--amber); }
+    .mc-line { height: 6px; border-radius: 4px; background: rgba(255,255,255,0.12); margin-bottom: 7px; }
+    .mc-line.w90 { width: 90%; } .mc-line.w75 { width: 75%; } .mc-line.w60 { width: 60%; } .mc-line.w45 { width: 45%; }
+    .mc-line.accent { background: linear-gradient(90deg, rgba(79,142,247,0.6), rgba(79,142,247,0.18)); }
+
+    /* faux waveform */
+    .wave { display: flex; align-items: flex-end; gap: 3px; height: 38px; margin-top: 4px; }
+    .wave i {
+      flex: 1; background: linear-gradient(180deg, var(--blue), rgba(79,142,247,0.3));
+      border-radius: 3px; animation: bar 1.6s ease-in-out infinite;
+    }
+    @keyframes bar { 0%,100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+
+    /* faux chart */
+    .chart svg { width: 100%; height: 56px; display: block; }
+
+    /* virality gauge */
+    .gauge { display: flex; align-items: center; gap: 12px; }
+    .gauge-num { font-family: var(--font-mono); font-size: 1.9rem; font-weight: 800; color: var(--green); line-height: 1; }
+    .gauge-num small { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+    .gauge-meta .gm-grade { font-size: 0.72rem; color: var(--green); font-weight: 700; }
+    .gauge-meta .gm-sub { font-size: 0.66rem; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+    /* ════════════════════════════════════════════════════════════════
+       CORE CAPABILITIES (editorial faded serif list)
+       ════════════════════════════════════════════════════════════════ */
+    .caps { position: relative; z-index: 1; padding: 70px 0 100px; border-top: 1px solid var(--line); }
+    .caps-head {
+      text-align: center; font-size: 0.74rem; letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 50px;
+    }
+    .caps-list { display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .cap-row {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(2rem, 5.4vw, 3.7rem); line-height: 1.42;
+      color: var(--faint);
+      letter-spacing: -0.01em;
+      transition: color 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1);
+      cursor: default; position: relative;
+    }
+    .cap-row .cap-no {
+      font-family: var(--font-mono); font-size: 0.85rem; font-weight: 500;
+      vertical-align: super; color: var(--faint); margin-right: 10px;
+      transition: color 0.4s;
+    }
+    .cap-row:hover { color: var(--ink); transform: translateX(0); }
+    .cap-row:hover .cap-no { color: var(--steel); }
+    .cap-row:hover i { font-style: italic; color: var(--steel); }
+    .caps-cta { display: flex; justify-content: center; margin-top: 54px; }
+
+    /* ════════════════════════════════════════════════════════════════
+       TREND RADAR (live trend discovery + ranking)
+       ════════════════════════════════════════════════════════════════ */
+    .radar { position: relative; z-index: 1; padding: 90px 0; border-top: 1px solid var(--line); background: var(--paper-2); }
+    .radar-eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--steel); margin-bottom: 18px;
+    }
+    .radar-eyebrow::before { content: ''; width: 26px; height: 1.5px; background: var(--steel); opacity: 0.6; }
+    .radar-title {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(2.1rem, 4.4vw, 3.2rem); line-height: 1.1; letter-spacing: -0.015em;
+      margin-bottom: 14px; color: var(--ink);
+    }
+    .radar-title i { font-style: italic; color: var(--steel); }
+    .radar-desc { color: var(--ink-soft); max-width: 560px; font-size: 1.02rem; line-height: 1.6; margin-bottom: 32px; }
+
+    .radar-controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+    .radar-cats { display: flex; gap: 8px; flex-wrap: wrap; }
+    .radar-cat {
+      font-family: var(--font-sans); font-size: 0.86rem; font-weight: 500;
+      padding: 9px 16px; border-radius: 100px; cursor: pointer;
+      background: rgba(20,23,31,0.04); color: var(--ink-soft); border: 1px solid var(--line);
+      transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.2s;
+    }
+    .radar-cat:hover { transform: translateY(-1px); border-color: var(--steel); }
+    .radar-cat.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .radar-btn {
+      background: var(--ink); color: var(--paper); border: none; border-radius: 12px;
+      padding: 13px 26px; font-family: var(--font-sans); font-weight: 600; font-size: 0.94rem;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 10px; white-space: nowrap;
+      transition: transform 0.25s, box-shadow 0.25s, opacity 0.25s;
+      box-shadow: 0 8px 22px rgba(20,23,31,0.18);
+    }
+    .radar-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(20,23,31,0.26); }
+    .radar-btn:disabled { opacity: 0.7; cursor: wait; transform: none; }
+    .radar-btn svg { width: 15px; height: 15px; }
+
+    .radar-meta {
+      display: flex; align-items: center; gap: 12px; min-height: 24px; margin-bottom: 26px;
+      font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.02em;
+    }
+    .radar-live {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
+      color: var(--green); background: rgba(61,214,140,0.12); border: 1px solid rgba(61,214,140,0.35);
+      padding: 3px 9px; border-radius: 100px;
+    }
+    .radar-live .pulse { width: 5px; height: 5px; background: var(--green); border-radius: 50%; animation: pulse 1.8s infinite; }
+    .radar-err { color: var(--red); font-family: var(--font-sans); }
+
+    .radar-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .trend-card {
+      background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 22px;
+      display: flex; flex-direction: column; gap: 14px; position: relative;
+      box-shadow: 0 4px 18px rgba(20,23,31,0.05);
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .trend-card:hover { transform: translateY(-3px); border-color: var(--steel); box-shadow: 0 12px 30px rgba(20,23,31,0.1); }
+    .tc-top { display: flex; align-items: flex-start; gap: 14px; }
+    .tc-rank {
+      font-family: var(--font-display); font-size: 1.7rem; font-weight: 600; line-height: 1;
+      color: var(--steel); flex-shrink: 0; min-width: 42px;
+    }
+    .tc-rank span { font-family: var(--font-mono); font-size: 0.8rem; font-weight: 500; color: var(--faint); }
+    .tc-head { flex: 1; }
+    .tc-title { font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1.35; margin-bottom: 8px; }
+    .tc-badge {
+      display: inline-block; font-family: var(--font-mono); font-size: 0.58rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 5px;
+      background: rgba(79,142,247,0.12); color: var(--steel);
+    }
+    .tc-stats { display: flex; gap: 22px; padding: 12px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .tc-stat .ts-num { font-family: var(--font-mono); font-size: 1.3rem; font-weight: 700; color: var(--ink); line-height: 1; }
+    .tc-stat .ts-num.up { color: var(--green); }
+    .tc-stat .ts-lbl { font-size: 0.66rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); margin-top: 5px; }
+    .tc-sources { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tc-source {
+      font-family: var(--font-mono); font-size: 0.62rem; color: var(--ink-soft);
+      background: rgba(20,23,31,0.04); border: 1px solid var(--line); padding: 3px 8px; border-radius: 100px;
+    }
+    .tc-use {
+      margin-top: auto; align-self: flex-start; background: transparent; border: 1px solid var(--ink);
+      color: var(--ink); border-radius: 8px; padding: 9px 16px; font-family: var(--font-sans);
+      font-weight: 600; font-size: 0.84rem; cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+      transition: background 0.25s, color 0.25s, transform 0.2s;
+    }
+    .tc-use:hover { background: var(--ink); color: var(--paper); transform: translateY(-1px); }
+    .tc-use svg { width: 13px; height: 13px; }
+
+    .trend-skel {
+      background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 22px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .radar-skel-line {
+      height: 11px; border-radius: 5px; background: var(--paper-2);
+      background-image: linear-gradient(90deg, rgba(20,23,31,0.03) 0%, rgba(20,23,31,0.09) 50%, rgba(20,23,31,0.03) 100%);
+      background-size: 200% 100%; animation: shimmer 1.3s infinite;
+    }
+    .radar-skel-line.w90 { width: 90%; } .radar-skel-line.w60 { width: 60%; } .radar-skel-line.w40 { width: 40%; }
+    .radar-empty { color: var(--muted); font-style: italic; font-size: 0.92rem; grid-column: 1 / -1; padding: 10px 0; }
+
+    /* ════════════════════════════════════════════════════════════════
+       ONE-CLICK CONTENT PACK (interactive tool)
+       ════════════════════════════════════════════════════════════════ */
+    .tool { position: relative; z-index: 1; padding: 96px 0; background: var(--dark-bg); color: #fff; }
+    .tool::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+      background:
+        radial-gradient(ellipse 50% 50% at 12% 0%, rgba(79,142,247,0.18), transparent 60%),
+        radial-gradient(ellipse 50% 50% at 90% 100%, rgba(167,139,250,0.14), transparent 60%);
+    }
+    .tool .wrap { position: relative; z-index: 2; }
+    .tool-eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--steel-light); margin-bottom: 18px;
+    }
+    .tool-eyebrow::before { content: ''; width: 26px; height: 1.5px; background: var(--steel-light); opacity: 0.6; }
+    .tool-title {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(2.1rem, 4.4vw, 3.2rem); line-height: 1.1; letter-spacing: -0.015em;
+      margin-bottom: 14px;
+    }
+    .tool-title i { font-style: italic; color: var(--steel-light); }
+    .tool-desc { color: rgba(255,255,255,0.6); max-width: 560px; font-size: 1.02rem; line-height: 1.6; margin-bottom: 36px; }
+
+    .pack-input-row { display: flex; gap: 14px; max-width: 720px; margin-bottom: 44px; flex-wrap: wrap; }
+    .pack-input {
+      flex: 1; min-width: 240px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px; padding: 16px 20px; color: #fff;
+      font-family: var(--font-sans); font-size: 0.98rem; outline: none; transition: border-color 0.25s, background 0.25s;
+    }
+    .pack-input::placeholder { color: rgba(255,255,255,0.4); }
+    .pack-input:focus { border-color: var(--blue); background: rgba(255,255,255,0.08); }
+    .pack-btn {
+      background: var(--blue); color: #fff; border: none; border-radius: 12px;
+      padding: 16px 30px; font-family: var(--font-sans); font-weight: 600; font-size: 0.98rem;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 10px; white-space: nowrap;
+      transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 10px 26px rgba(79,142,247,0.32);
+    }
+    .pack-btn:hover { background: #3a7be8; transform: translateY(-2px); }
+    .pack-btn:disabled { opacity: 0.7; cursor: wait; transform: none; }
+    .pack-btn svg { width: 16px; height: 16px; }
+
+    .pack-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px;
+    }
+    .pack-card {
+      background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px; padding: 26px; min-height: 220px;
+      display: flex; flex-direction: column; position: relative; overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .pack-card:hover { border-color: rgba(255,255,255,0.16); transform: translateY(-3px); }
+    .pc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .pc-label {
+      font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--blue);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .pc-label .ic {
+      width: 26px; height: 26px; border-radius: 7px; display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(79,142,247,0.14); color: var(--blue);
+    }
+    .pc-label .ic svg { width: 14px; height: 14px; }
+    .pc-status {
+      font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35); padding: 3px 9px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.1);
+    }
+    .pc-status.loading { color: var(--amber); border-color: rgba(245,166,35,0.4); }
+    .pc-status.ok { color: var(--green); border-color: rgba(61,214,140,0.4); }
+    .pc-status.err { color: var(--red); border-color: rgba(240,82,82,0.4); }
+
+    .pc-body { flex: 1; font-size: 0.9rem; line-height: 1.6; color: rgba(255,255,255,0.78); }
+    .pc-body .empty { color: rgba(255,255,255,0.35); font-size: 0.86rem; font-style: italic; }
+    .pc-block { margin-bottom: 12px; }
+    .pc-block:last-child { margin-bottom: 0; }
+    .pc-tag {
+      font-family: var(--font-mono); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.06em;
+      padding: 2px 7px; border-radius: 4px; margin-bottom: 5px; display: inline-block;
+      background: rgba(79,142,247,0.16); color: var(--steel-light);
+    }
+    .pc-tag.hook { background: rgba(245,166,35,0.16); color: var(--amber); }
+    .pc-tag.cta { background: rgba(61,214,140,0.16); color: var(--green); }
+    .pc-text { color: rgba(255,255,255,0.85); }
+    .pc-hash { color: var(--steel-light); font-size: 0.82rem; margin-top: 10px; word-break: break-word; }
+
+    /* skeleton loader */
+    .skel { height: 9px; border-radius: 5px; background: rgba(255,255,255,0.08);
+      background-image: linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.14) 50%, rgba(255,255,255,0.04) 100%);
+      background-size: 200% 100%; animation: shimmer 1.3s infinite; margin-bottom: 10px; }
+    .skel.w90 { width: 90%; } .skel.w70 { width: 70%; } .skel.w50 { width: 50%; }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* virality score card */
+    .viral-score { display: flex; align-items: baseline; gap: 14px; margin-top: 4px; }
+    .viral-score .vs-num { font-family: var(--font-mono); font-size: 3.1rem; font-weight: 800; line-height: 1; color: var(--green); }
+    .viral-score .vs-num small { font-size: 1.1rem; color: rgba(255,255,255,0.3); }
+    .viral-grade {
+      font-family: var(--font-mono); font-size: 0.92rem; font-weight: 700; color: var(--green);
+      padding: 6px 14px; border-radius: 8px; background: rgba(61,214,140,0.12); border: 1px solid rgba(61,214,140,0.3);
+    }
+    .viral-bar-track { height: 6px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; margin-top: 20px; }
+    .viral-bar-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--green)); border-radius: 100px; width: 0; transition: width 0.9s cubic-bezier(0.16,1,0.3,1); }
+
+    /* ════════════════════════════════════════════════════════════════
+       FOOTER
+       ════════════════════════════════════════════════════════════════ */
+    .footer { background: var(--ink); color: #fff; padding: 70px 0 44px; position: relative; z-index: 1; }
+    .footer-top { display: flex; align-items: center; justify-content: space-between; gap: 30px; flex-wrap: wrap;
+      padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 36px; }
+    .footer-cta-title {
+      font-family: var(--font-display); font-weight: 500; font-size: clamp(1.6rem, 3vw, 2.3rem);
+      line-height: 1.2; max-width: 560px;
+    }
+    .footer-cta-title i { font-style: italic; color: var(--steel-light); }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .footer-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.05rem; }
+    .footer-brand svg { width: 24px; height: 24px; }
+    .footer-note { font-size: 0.82rem; color: rgba(255,255,255,0.5); }
+    .footer-link { font-size: 0.88rem; color: rgba(255,255,255,0.7); font-weight: 500; transition: color 0.25s; }
+    .footer-link:hover { color: #fff; }
+
+    /* ════════════════════════════════════════════════════════════════
+       RESPONSIVE
+       ════════════════════════════════════════════════════════════════ */
+    @media (max-width: 980px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+      .mock { max-width: 520px; }
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+    }
+    @media (max-width: 720px) {
+      .wrap { padding: 0 22px; }
+      .hero { padding: 54px 0 70px; }
+      .hero-meta { gap: 24px; }
+      .pack-grid { grid-template-columns: 1fr; }
+      .radar-grid { grid-template-columns: 1fr; }
+      .mock-body { grid-template-columns: 1fr; }
+      .footer-top { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .wave i, .mock-badge .pulse, .skel { animation: none !important; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Shared Creatrix logo mark -->
+  <svg style="display:none">
+    <symbol id="creatrix-mark" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="16" stroke="currentColor" stroke-width="3" fill="none"/>
+      <circle cx="50" cy="28" r="12" stroke="currentColor" stroke-width="2.4" fill="none" opacity="0.5"/>
+      <circle cx="69" cy="39" r="12" stroke="currentColor" stroke-width="2.4" fill="none" opacity="0.5"/>
+      <circle cx="69" cy="61" r="12" stroke="currentColor" stroke-width="2.4" fill="none" opacity="0.5"/>
+      <circle cx="50" cy="72" r="12" stroke="currentColor" stroke-width="2.4" fill="none" opacity="0.5"/>
+      <circle cx="31" cy="61" r="12" stroke="currentColor" stroke-width="2.4" fill="none" opacity="0.5"/>
+      <circle cx="31" cy="39" r="12" stroke="currentColor" stroke-width="2.4" fill="none" opacity="0.5"/>
+    </symbol>
+  </svg>
+
+  <!-- ══════════════════════════════ NAV ══════════════════════════════ -->
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" aria-label="Creatrix Studio home">
+        <svg class="brand-mark"><use href="#creatrix-mark"/></svg>
+        <span class="brand-name">Creatrix <span>Studio</span></span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-link" href="#capabilities">Platform</a>
+        <a class="nav-link" href="#tool">Trends</a>
+        <a class="nav-link" href="#tool">Pricing</a>
+        <a class="btn btn-solid" href="dashboard.html">
+          Open Studio
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════ HERO ══════════════════════════════ -->
+  <header class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">AI Viral Reel Creator Agent</span>
+        <h1 class="hero-title">Viral content,<br><i>reimagined.</i></h1>
+        <p class="hero-sub">
+          Creatrix Studio turns live, trending moments into ready-to-post content. Discover what's
+          breaking right now, then generate reel scripts, LinkedIn posts, Instagram captions and
+          AI images — with a virality score before you ever hit publish.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-solid" href="#tool" id="cta-generate">
+            Generate Content
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M19 12l-7 7-7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="btn btn-outline" href="dashboard.html">Open Studio</a>
+        </div>
+        <div class="hero-meta">
+          <div class="meta-item"><div class="meta-num">6</div><div class="meta-lbl">AI generators</div></div>
+          <div class="meta-item"><div class="meta-num">Live</div><div class="meta-lbl">Trend discovery</div></div>
+          <div class="meta-item"><div class="meta-num">1-click</div><div class="meta-lbl">Content pack</div></div>
+        </div>
+      </div>
+
+      <!-- Dark studio mockup -->
+      <div class="mock" aria-hidden="true">
+        <div class="mock-bar">
+          <span class="mock-dot r"></span><span class="mock-dot y"></span><span class="mock-dot g"></span>
+          <span class="mock-tablabel">creatrix · studio</span>
+          <span class="mock-badge"><span class="pulse"></span>LIVE TRENDS</span>
+        </div>
+        <div class="mock-body">
+          <!-- Reel script -->
+          <div class="mock-card wide">
+            <div class="mc-label">Reel Script <span class="tiny">30s · hooks</span></div>
+            <span class="mc-pill hook">HOOK</span>
+            <div class="mc-line w90 accent"></div>
+            <div class="mc-line w75"></div>
+            <div class="mc-line w60"></div>
+          </div>
+          <!-- Waveform -->
+          <div class="mock-card">
+            <div class="mc-label">Voiceover</div>
+            <div class="wave">
+              <i style="animation-delay:0s"></i><i style="animation-delay:.1s"></i><i style="animation-delay:.2s"></i>
+              <i style="animation-delay:.3s"></i><i style="animation-delay:.15s"></i><i style="animation-delay:.05s"></i>
+              <i style="animation-delay:.25s"></i><i style="animation-delay:.35s"></i><i style="animation-delay:.12s"></i>
+              <i style="animation-delay:.22s"></i><i style="animation-delay:.32s"></i><i style="animation-delay:.08s"></i>
+            </div>
+          </div>
+          <!-- Trend chart -->
+          <div class="mock-card chart">
+            <div class="mc-label">Trend Velocity <span class="tiny">+340%</span></div>
+            <svg viewBox="0 0 120 56" fill="none" preserveAspectRatio="none">
+              <polyline points="2,50 22,42 42,46 62,30 82,33 102,14 118,6" stroke="#4F8EF7" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="2,56 2,50 22,42 42,46 62,30 82,33 102,14 118,6 118,56" fill="rgba(79,142,247,0.12)" stroke="none"/>
+              <circle cx="118" cy="6" r="3" fill="#4F8EF7"/>
+            </svg>
+          </div>
+          <!-- Caption card -->
+          <div class="mock-card">
+            <div class="mc-label">IG Caption</div>
+            <div class="mc-line w90"></div>
+            <div class="mc-line w60"></div>
+            <div class="mc-line w45" style="background:rgba(167,139,250,0.4)"></div>
+          </div>
+          <!-- Virality gauge -->
+          <div class="mock-card">
+            <div class="mc-label">Virality</div>
+            <div class="gauge">
+              <div class="gauge-num">87<small>/100</small></div>
+              <div class="gauge-meta">
+                <div class="gm-grade">GRADE A</div>
+                <div class="gm-sub">High potential 🔥</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ════════════════════════ CORE CAPABILITIES ════════════════════════ -->
+  <section class="caps" id="capabilities">
+    <div class="wrap">
+      <div class="caps-head">Core Capabilities</div>
+      <div class="caps-list">
+        <div class="cap-row"><span class="cap-no">01</span>Trend <i>Discovery</i></div>
+        <div class="cap-row"><span class="cap-no">02</span>Reel <i>Scripts</i></div>
+        <div class="cap-row"><span class="cap-no">03</span>LinkedIn <i>Posts</i></div>
+        <div class="cap-row"><span class="cap-no">04</span>Instagram <i>Captions</i></div>
+        <div class="cap-row"><span class="cap-no">05</span>Virality <i>Prediction</i></div>
+        <div class="cap-row"><span class="cap-no">06</span>AI <i>Images</i></div>
+      </div>
+      <div class="caps-cta">
+        <a class="btn btn-outline" href="dashboard.html">
+          Explore Studio
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════ TREND RADAR ════════════════════════ -->
+  <section class="radar" id="radar">
+    <div class="wrap">
+      <span class="radar-eyebrow">Trend Radar</span>
+      <h2 class="radar-title">Scan what's <i>breaking right now.</i></h2>
+      <p class="radar-desc">
+        Pick a lane and pull the live trends Creatrix is tracking this minute — ranked by
+        trend score and growth velocity, with their real sources. Found a winner? Send it
+        straight into the Content Pack below.
+      </p>
+
+      <div class="radar-controls">
+        <div class="radar-cats" id="radar-cats" role="tablist" aria-label="Trend category">
+          <button class="radar-cat active" data-cat="all" type="button">All</button>
+          <button class="radar-cat" data-cat="ai" type="button">AI</button>
+          <button class="radar-cat" data-cat="tech" type="button">Tech</button>
+          <button class="radar-cat" data-cat="business" type="button">Business</button>
+          <button class="radar-cat" data-cat="creator economy" type="button">Creator Economy</button>
+        </div>
+        <button class="radar-btn" id="radar-go" type="button">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Scan Live Trends
+        </button>
+      </div>
+
+      <div class="radar-meta" id="radar-meta"></div>
+
+      <div class="radar-grid" id="radar-grid">
+        <div class="radar-empty">Choose a category and hit <strong>Scan Live Trends</strong> to surface ranked, live trends.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════ ONE-CLICK CONTENT PACK ════════════════════ -->
+  <section class="tool" id="tool">
+    <div class="wrap">
+      <span class="tool-eyebrow">One-Click Content Pack</span>
+      <h2 class="tool-title">Type a topic. Get a <i>full content kit.</i></h2>
+      <p class="tool-desc">
+        Enter any topic and Creatrix Studio fires four AI generators in parallel — a reel script,
+        a LinkedIn post, an Instagram caption, and a live virality score. Each result lands in its
+        own card the moment it's ready.
+      </p>
+
+      <div class="pack-input-row">
+        <input class="pack-input" id="pack-topic" type="text" value="AI tools for creators"
+               placeholder="e.g. AI tools for creators" aria-label="Content topic" />
+        <button class="pack-btn" id="pack-go">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13H11l-1 9 9-12.5H12l1-7.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/></svg>
+          Generate Pack
+        </button>
+      </div>
+
+      <div class="pack-grid">
+        <!-- Reel Script -->
+        <div class="pack-card">
+          <div class="pc-head">
+            <span class="pc-label">
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M10 9l5 3-5 3V9Z" fill="currentColor"/></svg></span>
+              Reel Script
+            </span>
+            <span class="pc-status" id="st-script">Idle</span>
+          </div>
+          <div class="pc-body" id="out-script"><span class="empty">Your hook, story, insight and CTA will appear here.</span></div>
+        </div>
+
+        <!-- LinkedIn -->
+        <div class="pack-card">
+          <div class="pc-head">
+            <span class="pc-label">
+              <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6 0h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.3-.02-2.95-1.8-2.95-1.8 0-2.07 1.4-2.07 2.85V21H9V9Z"/></svg></span>
+              LinkedIn Post
+            </span>
+            <span class="pc-status" id="st-linkedin">Idle</span>
+          </div>
+          <div class="pc-body" id="out-linkedin"><span class="empty">A ready-to-post LinkedIn write-up with hashtags.</span></div>
+        </div>
+
+        <!-- Instagram -->
+        <div class="pack-card">
+          <div class="pc-head">
+            <span class="pc-label">
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg></span>
+              Instagram Caption
+            </span>
+            <span class="pc-status" id="st-instagram">Idle</span>
+          </div>
+          <div class="pc-body" id="out-instagram"><span class="empty">An engaging caption plus a hashtag set.</span></div>
+        </div>
+
+        <!-- Virality -->
+        <div class="pack-card">
+          <div class="pc-head">
+            <span class="pc-label">
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13H11l-1 9 9-12.5H12l1-7.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+              Virality Score
+            </span>
+            <span class="pc-status" id="st-virality">Idle</span>
+          </div>
+          <div class="pc-body" id="out-virality"><span class="empty">A predicted virality score and grade.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════ FOOTER ══════════════════════════════ -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-cta-title">Turn today's trends into <i>tomorrow's reach.</i></div>
+        <a class="btn btn-ghost" style="background:#fff;color:var(--ink);border-color:#fff" href="dashboard.html">
+          Open Studio
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-brand">
+          <svg><use href="#creatrix-mark"/></svg>
+          Creatrix Studio
+        </div>
+        <div class="footer-note">Creatrix Studio — Ratefluencer AI Hackathon 2026</div>
+        <a class="footer-link" href="dashboard.html">Open Studio →</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Creatrix shared config + orb -->
+  <script src="config.js"></script>
+  <script src="orb.js" defer></script>
+
+  <script>
+    (function () {
+      var API = (window.API_BASE || 'http://localhost:8080');
+
+      // Smooth-scroll "Generate Content" → tool, then focus topic.
+      var ctaGen = document.getElementById('cta-generate');
+      if (ctaGen) {
+        ctaGen.addEventListener('click', function () {
+          setTimeout(function () {
+            var t = document.getElementById('pack-topic');
+            if (t) t.focus();
+          }, 600);
+        });
+      }
+
+      var esc = function (s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      };
+
+      var setStatus = function (id, state, label) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.className = 'pc-status' + (state ? ' ' + state : '');
+        el.textContent = label;
+      };
+
+      var skeleton = function (id) {
+        var el = document.getElementById(id);
+        if (el) el.innerHTML =
+          '<div class="skel w90"></div><div class="skel w70"></div><div class="skel w90"></div><div class="skel w50"></div>';
+      };
+
+      var errCard = function (id, msg) {
+        var el = document.getElementById(id);
+        if (el) el.innerHTML = '<span class="empty">' + esc(msg) + '</span>';
+      };
+
+      // Generic POST that never throws to the caller.
+      var post = function (path, body) {
+        return fetch(API + path, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        }).then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        });
+      };
+
+      // ── Per-card renderers ──────────────────────────────────────────
+      function renderScript(d) {
+        var rows = [
+          ['hook', 'HOOK', d.hook],
+          ['', 'STORY', d.story],
+          ['', 'INSIGHT', d.insight],
+          ['cta', 'CTA', d.cta]
+        ].filter(function (r) { return r[2]; });
+        if (!rows.length) return errCard('out-script', 'No script returned for this topic.');
+        document.getElementById('out-script').innerHTML = rows.map(function (r) {
+          return '<div class="pc-block"><span class="pc-tag ' + r[0] + '">' + r[1] +
+                 '</span><div class="pc-text">' + esc(r[2]) + '</div></div>';
+        }).join('');
+      }
+
+      function renderLinkedIn(d) {
+        var html = '';
+        if (d.post_text) html += '<div class="pc-text">' + esc(d.post_text).replace(/\n/g, '<br>') + '</div>';
+        if (d.hashtags && d.hashtags.length) html += '<div class="pc-hash">' + esc(d.hashtags.join(' ')) + '</div>';
+        if (!html) return errCard('out-linkedin', 'No LinkedIn post returned.');
+        document.getElementById('out-linkedin').innerHTML = html;
+      }
+
+      function renderInstagram(d) {
+        var html = '';
+        if (d.caption) html += '<div class="pc-text">' + esc(d.caption).replace(/\n/g, '<br>') + '</div>';
+        if (d.hashtags && d.hashtags.length) html += '<div class="pc-hash">' + esc(d.hashtags.join(' ')) + '</div>';
+        if (!html) return errCard('out-instagram', 'No caption returned.');
+        document.getElementById('out-instagram').innerHTML = html;
+      }
+
+      function renderVirality(d) {
+        var score = (d.virality_score != null) ? d.virality_score : 0;
+        var grade = d.grade || 'B';
+        document.getElementById('out-virality').innerHTML =
+          '<div class="viral-score"><div class="vs-num">' + esc(score) + '<small>/100</small></div>' +
+          '<div class="viral-grade">Grade ' + esc(grade) + '</div></div>' +
+          '<div class="viral-bar-track"><div class="viral-bar-fill" id="viral-fill"></div></div>';
+        requestAnimationFrame(function () {
+          var f = document.getElementById('viral-fill');
+          if (f) f.style.width = Math.max(0, Math.min(100, Number(score))) + '%';
+        });
+      }
+
+      // Wire one endpoint → one card, fully isolated.
+      function run(statusId, outId, promise, render) {
+        setStatus(statusId, 'loading', 'Generating');
+        skeleton(outId);
+        return promise.then(function (d) {
+          render(d);
+          setStatus(statusId, 'ok', 'Ready');
+        }).catch(function (e) {
+          console.warn(outId + ' failed:', e && e.message);
+          setStatus(statusId, 'err', 'Offline');
+          errCard(outId, 'API offline — start the Creatrix backend to generate this.');
+        });
+      }
+
+      var btn = document.getElementById('pack-go');
+      btn.addEventListener('click', function () {
+        var input = document.getElementById('pack-topic');
+        var topic = (input.value || '').trim() || 'AI tools for creators';
+        input.value = topic;
+
+        btn.disabled = true;
+        var original = btn.innerHTML;
+        btn.innerHTML = btn.innerHTML.replace('Generate Pack', 'Generating…');
+
+        // Fire all four IN PARALLEL; each card succeeds/fails on its own.
+        Promise.all([
+          run('st-script', 'out-script',
+              post('/api/v1/content/generate-script', { topic: topic, duration: 30, style: 'hooks' }),
+              renderScript),
+          run('st-linkedin', 'out-linkedin',
+              post('/api/v1/content/linkedin', { topic: topic, audience: 'creators' }),
+              renderLinkedIn),
+          run('st-instagram', 'out-instagram',
+              post('/api/v1/content/instagram', { topic: topic, style: 'engaging' }),
+              renderInstagram),
+          run('st-virality', 'out-virality',
+              post('/api/v1/virality/predict', { script_text: topic, platform: 'instagram' }),
+              renderVirality)
+        ]).then(function () {
+          btn.disabled = false;
+          btn.innerHTML = original;
+        });
+      });
+
+      // Submit on Enter inside the topic field.
+      document.getElementById('pack-topic').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); btn.click(); }
+      });
+    })();
+  </script>
+
+  <!-- Trend Radar: live trend discovery + ranking -->
+  <script>
+    (function () {
+      var API = (window.API_BASE || 'http://localhost:8080');
+
+      var esc = function (s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      };
+
+      var grid = document.getElementById('radar-grid');
+      var meta = document.getElementById('radar-meta');
+      var goBtn = document.getElementById('radar-go');
+      var cats = document.getElementById('radar-cats');
+      var selectedCat = 'all';
+
+      // Category selection.
+      cats.addEventListener('click', function (e) {
+        var b = e.target.closest('.radar-cat');
+        if (!b) return;
+        selectedCat = b.getAttribute('data-cat') || 'all';
+        Array.prototype.forEach.call(cats.querySelectorAll('.radar-cat'), function (x) {
+          x.classList.toggle('active', x === b);
+        });
+      });
+
+      function showSkeletons() {
+        var one =
+          '<div class="trend-skel">' +
+          '<div class="radar-skel-line w40"></div>' +
+          '<div class="radar-skel-line w90"></div>' +
+          '<div class="radar-skel-line w60"></div>' +
+          '<div class="radar-skel-line w40"></div>' +
+          '</div>';
+        grid.innerHTML = one + one + one + one;
+      }
+
+      var fmtScore = function (v) {
+        if (v == null || v === '') return '—';
+        var n = Number(v);
+        return isNaN(n) ? esc(v) : (Math.round(n * 10) / 10);
+      };
+
+      var fmtVelocity = function (v) {
+        if (v == null || v === '') return '—';
+        var n = Number(v);
+        if (isNaN(n)) return esc(v);
+        var rounded = Math.round(n * 10) / 10;
+        return (rounded > 0 ? '+' : '') + rounded + '%';
+      };
+
+      function renderTrends(resp) {
+        var trends = (resp && Array.isArray(resp.trends)) ? resp.trends : [];
+        if (!trends.length) {
+          grid.innerHTML = '<div class="radar-empty">No live trends came back for this category. Try another lane or scan again.</div>';
+          meta.innerHTML = '';
+          return;
+        }
+
+        meta.innerHTML =
+          (resp && resp.is_live ? '<span class="radar-live"><span class="pulse"></span>LIVE</span>' : '') +
+          '<span>' + trends.length + ' trends · ' + esc(selectedCat === 'all' ? 'all categories' : selectedCat) + '</span>';
+
+        grid.innerHTML = trends.map(function (t, i) {
+          var title = (t && (t.title || t.name || t.topic)) || 'Untitled trend';
+          var category = (t && (t.category || t.tag)) || (selectedCat === 'all' ? 'Trending' : selectedCat);
+          var sources = (t && Array.isArray(t.sources)) ? t.sources : [];
+          var velUp = (Number(t && t.growth_velocity) || 0) >= 0;
+
+          var sourcesHtml = sources.length
+            ? sources.map(function (s) { return '<span class="tc-source">' + esc(s) + '</span>'; }).join('')
+            : '<span class="tc-source">live feed</span>';
+
+          return (
+            '<article class="trend-card">' +
+              '<div class="tc-top">' +
+                '<div class="tc-rank">#' + (i + 1) + '</div>' +
+                '<div class="tc-head">' +
+                  '<div class="tc-title">' + esc(title) + '</div>' +
+                  '<span class="tc-badge">' + esc(category) + '</span>' +
+                '</div>' +
+              '</div>' +
+              '<div class="tc-stats">' +
+                '<div class="tc-stat"><div class="ts-num">' + fmtScore(t && t.score) + '</div><div class="ts-lbl">Trend Score</div></div>' +
+                '<div class="tc-stat"><div class="ts-num ' + (velUp ? 'up' : '') + '">' + fmtVelocity(t && t.growth_velocity) + '</div><div class="ts-lbl">Growth Velocity</div></div>' +
+              '</div>' +
+              '<div class="tc-sources">' + sourcesHtml + '</div>' +
+              '<button class="tc-use" type="button" data-title="' + esc(title) + '">' +
+                'Use this trend' +
+                '<svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              '</button>' +
+            '</article>'
+          );
+        }).join('');
+      }
+
+      // "Use this trend →" sets the Content Pack topic input + smooth-scrolls to it.
+      grid.addEventListener('click', function (e) {
+        var b = e.target.closest('.tc-use');
+        if (!b) return;
+        var title = b.getAttribute('data-title') || '';
+        var topicInput = document.getElementById('pack-topic');
+        if (topicInput) {
+          topicInput.value = title;
+          var tool = document.getElementById('tool');
+          if (tool && tool.scrollIntoView) tool.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(function () { try { topicInput.focus(); } catch (err) {} }, 500);
+        }
+      });
+
+      function scan() {
+        goBtn.disabled = true;
+        var original = goBtn.innerHTML;
+        goBtn.innerHTML = goBtn.innerHTML.replace('Scan Live Trends', 'Scanning…');
+        meta.innerHTML = '';
+        showSkeletons();
+
+        fetch(API + '/api/v1/trends/discover', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category: selectedCat, limit: 8 })
+        }).then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        }).then(function (resp) {
+          renderTrends(resp);
+        }).catch(function (err) {
+          console.warn('Trend Radar failed:', err && err.message);
+          grid.innerHTML = '<div class="radar-empty">Live trends are unavailable right now — start the Creatrix backend and scan again.</div>';
+          meta.innerHTML = '<span class="radar-err">Couldn\'t reach the trend feed.</span>';
+        }).then(function () {
+          goBtn.disabled = false;
+          goBtn.innerHTML = original;
+        });
+      }
+
+      goBtn.addEventListener('click', scan);
+    })();
+  </script>
+</body>
+</html>

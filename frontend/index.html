@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CollabForge AI — Research. Score. Create. Close.</title>
+  <meta name="description" content="Live creator intelligence powered by Anakin. Discover creators, understand their content, evaluate brand fit and build campaigns from public data — via Anakin Wire and Universal Scraper.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/typography.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/states.css">
+  <link rel="stylesheet" href="css/pipeline.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="lp">
+
+  <!-- Header -->
+  <header class="lp-header">
+    <a class="lp-logo" href="index.html">
+      <svg class="logo-mark" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" aria-hidden="true">
+        <circle cx="50" cy="50" r="16"/><circle cx="50" cy="26" r="10" opacity="0.5"/>
+        <circle cx="72" cy="62" r="10" opacity="0.5"/><circle cx="28" cy="62" r="10" opacity="0.5"/>
+      </svg>
+      CollabForge<span style="color:var(--color-accent)">&nbsp;AI</span>
+    </a>
+    <nav class="lp-nav">
+      <a href="#platform">Platform</a>
+      <a href="#pipeline">Live Pipeline</a>
+      <a href="app.html?workspace=creator&view=trends">Creator Studio</a>
+      <a href="app.html?workspace=brand&view=discover">Brand Intelligence</a>
+      <a href="#how">How It Works</a>
+    </nav>
+    <div class="lp-header__cta">
+      <a class="btn btn--ghost btn--sm" href="#pipeline">View Demo</a>
+      <a class="btn btn--primary btn--sm" href="app.html?workspace=brand&view=discover">Open Platform</a>
+      <button class="btn btn--ghost btn--sm lp-burger" id="burger" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <!-- Mobile drawer -->
+  <div class="lp-scrim" id="scrim"></div>
+  <aside class="lp-drawer" id="drawer">
+    <a href="#platform">Platform</a>
+    <a href="#pipeline">Live Pipeline</a>
+    <a href="app.html?workspace=creator&view=trends">Creator Studio</a>
+    <a href="app.html?workspace=brand&view=discover">Brand Intelligence</a>
+    <a href="#how">How It Works</a>
+    <a class="btn btn--primary" href="app.html?workspace=brand&view=discover">Open Platform</a>
+  </aside>
+
+  <!-- Hero -->
+  <section class="lp-hero" id="platform">
+    <div class="lp-hero__grid"></div>
+    <div class="lp-hero__particles" id="particles"></div>
+    <div class="lp-hero__inner">
+      <div class="lp-hero__text">
+        <span class="eyebrow">Live creator intelligence powered by Anakin</span>
+        <h1 class="display">Creator intelligence,<br>built on <em>live evidence</em>.</h1>
+        <p class="lp-hero__lead">Discover creators, understand their content, evaluate brand fit and build campaigns from public data — powered by Anakin Wire and the Universal Scraper. Every score traces back to evidence.</p>
+        <div class="lp-hero__cta">
+          <a class="btn btn--primary" href="app.html?workspace=brand&view=discover">Explore Brand Intelligence</a>
+          <a class="btn btn--dark" href="app.html?workspace=creator&view=trends">Open Creator Studio</a>
+          <a class="lp-hero__tertiary" href="#pipeline">Watch the live pipeline →</a>
+        </div>
+        <div class="cap-labels" id="cap-labels">
+          <span class="cap-label" data-cap="wire"><span class="cap-label__dot"></span>Anakin Wire</span>
+          <span class="cap-label" data-cap="scraper"><span class="cap-label__dot"></span>Universal Scraper</span>
+          <span class="cap-label" data-cap="search"><span class="cap-label__dot"></span>Evidence-backed research</span>
+          <span class="cap-label" data-cap="openai"><span class="cap-label__dot"></span>OpenAI reasoning</span>
+          <span class="cap-label" data-cap="elevenlabs"><span class="cap-label__dot"></span>ElevenLabs voice</span>
+        </div>
+      </div>
+
+      <!-- Product studio frame (Creatrix-style mockup) -->
+      <div class="lp-hero__visual" aria-hidden="true">
+        <div class="studio-frame">
+          <div class="studio-frame__bar">
+            <span class="sf-dot sf-dot--r"></span><span class="sf-dot sf-dot--y"></span><span class="sf-dot sf-dot--g"></span>
+            <span class="studio-frame__title">collabforge · studio</span>
+            <span class="studio-frame__live"><span class="sf-live-dot"></span>LIVE</span>
+          </div>
+          <div class="studio-frame__body">
+            <div class="sf-card sf-card--wide">
+              <div class="sf-card__head">REEL SCRIPT <span>30S · HOOKS</span></div>
+              <span class="sf-tag">HOOK</span>
+              <div class="sf-bars"><i style="width:94%"></i><i style="width:80%"></i><i style="width:66%"></i></div>
+            </div>
+            <div class="sf-grid2">
+              <div class="sf-card">
+                <div class="sf-card__head">VOICEOVER</div>
+                <div class="sf-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              </div>
+              <div class="sf-card">
+                <div class="sf-card__head">TREND SIGNAL</div>
+                <svg class="sf-spark" width="150" height="54" viewBox="0 0 150 54" fill="none" preserveAspectRatio="none">
+                  <polyline points="4,46 30,40 54,42 78,30 104,26 128,12 146,6" stroke="#4d82ec" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="146" cy="6" r="3.5" fill="#4d82ec"/>
+                </svg>
+              </div>
+            </div>
+            <div class="sf-grid2">
+              <div class="sf-card">
+                <div class="sf-card__head">IG CAPTION</div>
+                <div class="sf-lines"><i style="width:90%"></i><i style="width:72%"></i><i style="width:84%"></i></div>
+              </div>
+              <div class="sf-card sf-card--score">
+                <div class="sf-card__head">VIRALITY</div>
+                <div class="sf-score">87<span>/100</span></div>
+                <div class="sf-grade">GRADE A · High potential</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Two product paths -->
+  <section class="lp-section" id="paths">
+    <div class="lp-section__head">
+      <span class="eyebrow">Two ways in — one platform</span>
+      <h2>Whether you make content or buy it, start from live evidence.</h2>
+    </div>
+    <div class="lp-paths">
+      <div class="lp-path">
+        <span class="lp-path__num">01 / Creator Studio</span>
+        <h3>Turn live trends into content</h3>
+        <p>Turn live trends into scripts, social content, voiceovers and AI-assisted reels — grounded in what's actually happening now.</p>
+        <a class="btn btn--primary" href="app.html?workspace=creator&view=trends">Enter Creator Studio</a>
+      </div>
+      <div class="lp-path">
+        <span class="lp-path__num">02 / Brand Intelligence</span>
+        <h3>Discover, evaluate & close</h3>
+        <p>Discover creators, evaluate fit against your brand and assemble a complete collaboration campaign — outreach, brief and contract included.</p>
+        <a class="btn btn--primary" href="app.html?workspace=brand&view=discover">Enter Brand Intelligence</a>
+        <div class="lp-path__auto">
+          <span class="eyebrow">Collab Autopilot</span>
+          <p class="small">From a business brief to a creator shortlist, outreach, campaign plan and contract draft — one guided run.</p>
+          <a class="btn btn--ghost btn--sm" href="app.html?workspace=brand&view=autopilot">Run Autopilot</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live pipeline -->
+  <section class="lp-pipeline" id="pipeline">
+    <div class="lp-section">
+      <div class="lp-section__head">
+        <span class="eyebrow">The live intelligence pipeline</span>
+        <h2>Anakin gathers public data, structures the evidence and feeds every CollabForge decision.</h2>
+      </div>
+      <div class="lp-pipeline__demo">
+        <div class="lp-demo-panel card card--pad">
+          <div class="field">
+            <label for="demo-query">Enter a creator, business or campaign topic</label>
+            <input class="input" id="demo-query" placeholder="e.g. Indian gaming creators" autocomplete="off">
+            <div class="lp-demo-examples">
+              <button data-ex="Technical Guruji">Try Technical Guruji</button>
+              <button data-ex="Indian gaming creators">Indian gaming creators</button>
+              <button data-ex="Sustainable skincare influencers">Sustainable skincare influencers</button>
+              <button data-ex="AI productivity trends">AI productivity trends</button>
+            </div>
+          </div>
+          <button class="btn btn--primary btn--block" id="run-pipeline">Run Live Pipeline</button>
+          <p class="hint" style="margin-top:var(--space-3)">Runs against live Anakin sources only when you click — nothing is pre-loaded or hardcoded.</p>
+        </div>
+        <div class="lp-pipeline-mount" id="pipeline-mount"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="lp-section" id="how">
+    <div class="lp-section__head">
+      <span class="eyebrow">How it works</span>
+      <h2>Input → Anakin → structured evidence → reasoning → decision.</h2>
+    </div>
+    <div class="lp-steps">
+      <div class="lp-step">
+        <div class="lp-step__n">01</div>
+        <h4>Route & retrieve</h4>
+        <p>A deterministic source router picks Anakin Wire for structured platform actions, the Universal Scraper for public pages, and Search for open web — in that order.</p>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step__n">02</div>
+        <h4>Normalize evidence</h4>
+        <p>Every result becomes a cited evidence record with its source, provider and confidence. Duplicates are removed; raw pages never reach your browser.</p>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step__n">03</div>
+        <h4>Reason & build</h4>
+        <p>Only after evidence is collected does the model reason over it — producing explainable scores, outreach, briefs and contracts you can edit.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="lp-footer">
+    <a class="lp-logo" href="index.html">
+      <svg class="logo-mark" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" aria-hidden="true"><circle cx="50" cy="50" r="16"/></svg>
+      CollabForge AI
+    </a>
+    <p>Research. Score. Create. Close.</p>
+    <p class="lp-footer__note">CollabForge surfaces only public data through Anakin. Scores are explainable estimates, not guarantees. Contracts are AI-generated templates for review, not legal advice.</p>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="js/core/formatters.js"></script>
+  <script src="js/core/events.js"></script>
+  <script src="js/core/storage.js"></script>
+  <script src="js/core/api-client.js"></script>
+  <script src="js/core/app-state.js"></script>
+  <script src="js/core/capabilities.js"></script>
+  <script src="js/core/ui-feedback.js"></script>
+  <script src="js/components/anakin-pipeline.js"></script>
+  <script src="js/components/chat-orb.js"></script>
+  <script src="js/landing.js"></script>
+</body>
+</html>

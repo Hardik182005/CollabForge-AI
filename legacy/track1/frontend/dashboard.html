@@ -1,0 +1,4007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creatrix AI — Creator Intelligence Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="config.js"></script>
+  <script src="orb.js" defer></script>
+
+  <style>
+    :root {
+      --blue: #4F8EF7;
+      --green: #3DD68C;
+      --amber: #F5A623;
+      --red: #F05252;
+      --purple: #A78BFA;
+      --dark-bg: #05091A;
+      --dark-card: #0C1229;
+      --light-bg: #F5F7FA;
+      --white: #FFFFFF;
+      --text-dark: #0D1117;
+      --text-muted: #6B7685;
+      --text-faint: #9AA3B0;
+      --border: #E8ECF2;
+      
+      --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-serif: 'Syne', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--light-bg);
+      color: var(--text-dark);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      overflow-x: hidden;
+    }
+
+    /* Page Transition Overlay */
+    .page-transition-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--dark-bg);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .page-transition-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* Sidebar Navigation - Dark Theme */
+    aside {
+      background: var(--dark-card);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      padding: 24px 16px;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding: 0 12px;
+      text-decoration: none;
+      color: var(--white);
+    }
+
+    .brand-logo svg {
+      width: 24px;
+      height: 24px;
+      color: var(--blue);
+    }
+
+    .brand-name {
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-group-label {
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: rgba(255, 255, 255, 0.25);
+      padding: 16px 12px 6px;
+      margin-top: 8px;
+    }
+
+    .sidebar-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      list-style: none;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.55);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .menu-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .menu-item.active {
+      background: rgba(79, 142, 247, 0.15);
+      color: var(--blue);
+      border-left: 3px solid var(--blue);
+      font-weight: 500;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .menu-item svg {
+      width: 16px;
+      height: 16px;
+    }
+    /* Main Dashboard Layout */
+    main {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      overflow-y: auto;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Track Toggle Pill */
+    .track-toggle {
+      display: flex;
+      background: var(--light-bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 4px;
+      gap: 2px;
+    }
+    .track-btn {
+      padding: 8px 18px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: transparent;
+      transition: all 0.22s ease;
+      white-space: nowrap;
+    }
+    .track-btn:hover { color: var(--text-dark); }
+    .track-btn.t-active-intel { background: var(--blue); color: #fff; box-shadow: 0 2px 10px rgba(79,142,247,0.30); }
+    .track-btn.t-active-creator { background: var(--purple); color: #fff; box-shadow: 0 2px 10px rgba(167,139,250,0.30); }
+    .track-btn.t-active-full { background: linear-gradient(90deg, var(--blue), var(--purple)); color: #fff; box-shadow: 0 2px 14px rgba(120,100,240,0.28); }
+
+    .header-left h1 {
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 28px;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+
+    .header-left p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .date-badge {
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      color: var(--text-muted);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    /* Stat Cards Row */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .metric-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .metric-title {
+      font-size: 11px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .metric-val {
+      font-family: var(--font-mono);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: -0.5px;
+    }
+
+    .metric-sub {
+      font-size: 13px;
+      color: var(--green);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Content Panels */
+    .content-panel {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .content-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Standard Cards */
+    .white-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      margin-bottom: 24px;
+    }
+
+    .panel-header {
+      margin-bottom: 24px;
+    }
+
+    .panel-header h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+
+    .panel-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* Platform Selector Pills */
+    .platform-selector {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .platform-pill {
+      background: var(--light-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 100px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .platform-pill:hover {
+      border-color: var(--text-faint);
+    }
+
+    .platform-pill.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: var(--white);
+    }
+
+    /* Text Inputs */
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .input-handle {
+      width: 100%;
+      background: var(--light-bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 14px 24px;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      color: var(--text-dark);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-handle:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(79, 142, 247, 0.15);
+      background: var(--white);
+    }
+
+    .btn-action {
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      border-radius: 100px;
+      padding: 14px 28px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-action:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(79, 142, 247, 0.2);
+    }
+
+    .btn-action:active {
+      transform: translateY(0);
+    }
+
+    /* Grids & Columns */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .two-col-60-40 {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .two-col-equal {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .three-col-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1.3fr 1.1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* Scores Grid */
+    .score-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .sub-score-card {
+      background: var(--light-bg);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .sub-score-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .sub-score-val {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .color-blue { color: var(--blue); }
+    .color-green { color: var(--green); }
+    .color-purple { color: var(--purple); }
+    .color-amber { color: var(--amber); }
+    .color-red { color: var(--red); }
+
+    /* SVG Chart Containers */
+    .chart-container {
+      background: var(--light-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 20px;
+      position: relative;
+    }
+
+    .chart-container h3 {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-dark);
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: 180px;
+      display: block;
+    }
+
+    /* Dark Terminal block */
+    .dark-terminal {
+      background: #0C1229;
+      border-radius: 12px;
+      padding: 20px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .terminal-scroll {
+      height: 200px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .terminal-line {
+      line-height: 1.5;
+    }
+
+    .term-ts {
+      color: rgba(255, 255, 255, 0.35);
+      margin-right: 6px;
+    }
+
+    .term-msg {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .term-msg.done {
+      color: var(--green);
+    }
+
+    .term-msg.system {
+      color: var(--blue);
+    }
+
+    /* Script Blocks */
+    .script-block {
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+    }
+
+    .script-block-pill {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      align-self: flex-start;
+      text-transform: uppercase;
+    }
+
+    .script-block-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-dark);
+    }
+
+    .script-block-time {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    /* Phone Mockup Frame */
+    .phone-container {
+      width: 230px;
+      height: 410px;
+      border-radius: 36px;
+      border: 4px solid var(--border);
+      background: #000000;
+      box-shadow: 0 20px 48px rgba(15, 23, 42, 0.15);
+      overflow: hidden;
+      position: relative;
+      margin: 0 auto;
+    }
+
+    .phone-notch {
+      width: 110px;
+      height: 16px;
+      background: var(--border);
+      border-radius: 0 0 12px 12px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #0f172a, #1e1b4b);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px 16px 16px;
+      color: var(--white);
+    }
+
+    .phone-bars-row {
+      display: flex;
+      gap: 4px;
+      width: 100%;
+      z-index: 10;
+    }
+
+    .phone-bar-segment {
+      flex: 1;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .phone-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--white);
+    }
+
+    .phone-header {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 500;
+      margin-top: 8px;
+      opacity: 0.8;
+      z-index: 10;
+    }
+
+    .phone-center-art {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 5;
+    }
+
+    .phone-center-art svg {
+      width: 48px;
+      height: 48px;
+      color: var(--blue);
+      animation: pulseLogo 3s infinite ease-in-out;
+    }
+
+    @keyframes pulseLogo {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+
+    .phone-caption-box {
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+      margin: 0 -16px -16px;
+      padding: 24px 16px 16px;
+      z-index: 10;
+    }
+
+    .phone-caption-handle {
+      font-weight: 700;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .phone-caption-text {
+      font-size: 11px;
+      line-height: 1.5;
+      opacity: 0.9;
+    }
+
+    .phone-caption-tags {
+      font-size: 10px;
+      color: var(--blue);
+      margin-top: 4px;
+    }
+
+    .phone-score-badge {
+      position: absolute;
+      top: 48px;
+      right: 12px;
+      background: rgba(255, 100, 0, 0.85);
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      z-index: 15;
+    }
+
+    /* List Tables */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      background: var(--light-bg);
+      padding: 14px 18px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-faint);
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 16px 18px;
+      font-size: 14px;
+      color: var(--text-dark);
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #FAFBFF;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-success { background: rgba(61, 214, 140, 0.1); color: var(--green); }
+    .badge-info { background: rgba(79, 142, 247, 0.1); color: var(--blue); }
+    .badge-warning { background: rgba(245, 166, 35, 0.1); color: var(--amber); }
+    .badge-danger { background: rgba(240, 82, 82, 0.1); color: var(--red); }
+
+    .tbl-btn {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .tbl-btn:hover {
+      text-decoration: underline;
+    }
+
+    /* Library Cards Grid */
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .library-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 200px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s ease;
+    }
+
+    .library-card:hover {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      border-color: var(--blue);
+    }
+
+    .lib-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .lib-tag {
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--light-bg);
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: var(--text-muted);
+    }
+
+    .lib-date {
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    .lib-body {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-dark);
+      flex-grow: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+    }
+
+    .lib-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+    }
+
+    .lib-score {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .lib-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .lib-act-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+
+    .lib-act-btn:hover {
+      background: var(--light-bg);
+      color: var(--text-dark);
+    }
+
+    /* Custom Arc Gauge Graphic */
+    .arc-gauge-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .arc-svg {
+      width: 160px;
+      height: 100px;
+    }
+
+    .arc-bg {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 12;
+      stroke-linecap: round;
+    }
+
+    .arc-fill {
+      fill: none;
+      stroke: var(--blue);
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-dasharray: 220;
+      stroke-dashoffset: 220;
+      transition: stroke-dashoffset 1s ease-in-out;
+    }
+
+    .arc-value {
+      font-family: var(--font-mono);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-dark);
+      position: absolute;
+      bottom: 24px;
+      letter-spacing: -0.5px;
+    }
+
+    .arc-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      position: absolute;
+      bottom: 4px;
+    }
+
+    /* Radial Donut Graphic */
+    .donut-svg {
+      width: 120px;
+      height: 120px;
+      transform: rotate(-90deg);
+    }
+
+    .donut-track {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 14;
+    }
+
+    .donut-segment {
+      fill: none;
+      stroke-width: 14;
+      stroke-dasharray: 283;
+      stroke-dashoffset: 283;
+      transition: stroke-dashoffset 1s ease;
+    }
+
+    /* Interactive lists */
+    .interactive-list-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 500px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .trend-row-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .trend-row-item:hover, .trend-row-item.active {
+      border-color: var(--blue);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    }
+
+    .trend-row-item.active {
+      background: rgba(79, 142, 247, 0.02);
+    }
+
+    .trend-main-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-grow: 1;
+    }
+
+    .trend-header-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .trend-rank {
+      font-weight: 700;
+      color: var(--blue);
+      font-size: 15px;
+    }
+
+    .trend-title {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text-dark);
+    }
+
+    .trend-sources-pills {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .source-mini-tag {
+      background: var(--light-bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 2px 8px;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .trend-meta-stats {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 90px;
+    }
+
+    .trend-row-score {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--text-dark);
+    }
+
+    .trend-growth-percent {
+      font-size: 11px;
+      color: var(--green);
+      font-weight: 500;
+    }
+
+    /* Platform selector buttons grid */
+    .style-pill-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .style-pill-card {
+      background: var(--light-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .style-pill-card:hover {
+      border-color: var(--text-faint);
+    }
+
+    .style-pill-card.active {
+      background: rgba(79, 142, 247, 0.08);
+      border-color: var(--blue);
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    /* ElevenLabs voice card selector */
+    .voice-selection-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .voice-option-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: 10px;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .voice-option-card:hover {
+      background: var(--light-bg);
+    }
+
+    .voice-option-card.active {
+      border-color: var(--blue);
+      background: rgba(79, 142, 247, 0.05);
+    }
+
+    .voice-opt-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-play-voice {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: none;
+      background: var(--blue);
+      color: var(--white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    .voice-opt-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .voice-opt-style {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--light-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .voice-opt-rating {
+      font-size: 11px;
+      color: var(--amber);
+    }
+
+    /* Thumbnail visual selectors */
+    .thumbnails-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .thumb-card {
+      border-radius: 8px;
+      aspect-ratio: 1.6;
+      background: #0f172a;
+      border: 2px solid transparent;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .thumb-card.active {
+      border-color: var(--blue);
+    }
+
+    .thumb-card span {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--white);
+      z-index: 2;
+    }
+
+    .thumb-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
+      z-index: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      body {
+        grid-template-columns: 1fr;
+      }
+      aside {
+        display: none;
+      }
+      .metrics-row {
+        grid-template-columns: 1fr 1fr;
+      }
+      .two-col-grid, .two-col-60-40, .two-col-equal, .three-col-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* =================================================================
+       AWARD-WINNING POLISH — blue & white refinement (override layer)
+       ================================================================= */
+
+    :root {
+      --blue: #3B82F6;
+      --blue-deep: #2563EB;
+      --blue-soft: #EFF5FF;
+      --ink: #0B1220;
+      --ink-soft: #5A6678;
+      --line: #EAEEF5;
+      --shadow-sm: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
+      --shadow-md: 0 4px 12px rgba(16,24,40,0.06), 0 12px 28px rgba(16,24,40,0.05);
+      --shadow-lg: 0 8px 24px rgba(16,24,40,0.08), 0 24px 48px rgba(16,24,40,0.07);
+      /* DM Sans everywhere — retire Syne in the dashboard for a clean, consistent look */
+      --font-serif: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* Force DM Sans on every heading, brand mark and chart title */
+    h1, h2, h3, h4, h5,
+    .header-left h1, .panel-header h2, .white-card h2,
+    .brand-name, .chart-container h3, .metric-val {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.025em !important;
+    }
+
+    /* Unify fonts — DM Sans everywhere */
+    body { font-family: var(--font-sans); letter-spacing: -0.01em;
+      background:
+        radial-gradient(900px 500px at 100% -5%, rgba(59,130,246,0.05), transparent 60%),
+        radial-gradient(700px 400px at -5% 0%, rgba(59,130,246,0.04), transparent 55%),
+        #F7F9FC;
+    }
+
+    .metric-val, .sub-score-val, .arc-value,
+    [style*="var(--font-mono)"][style*="20px"],
+    [style*="var(--font-mono)"][style*="28px"] {
+      font-family: var(--font-sans) !important;
+      font-feature-settings: "tnum" 1;
+      letter-spacing: -0.03em !important;
+      font-weight: 700 !important;
+    }
+
+    /* ---- Sidebar: deep premium navy with glow active state ---- */
+    aside {
+      background:
+        radial-gradient(420px 200px at 30% 0%, rgba(59,130,246,0.14), transparent 70%),
+        linear-gradient(180deg, #0A1020 0%, #070C18 100%);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      padding: 26px 14px;
+    }
+    .brand-logo { margin-bottom: 30px; }
+    .brand-name { font-family: var(--font-serif); letter-spacing: -0.4px; }
+    .nav-group-label { color: rgba(255,255,255,0.30); font-size: 10px; letter-spacing: 1.6px; }
+    .menu-item {
+      border-radius: 11px;
+      padding: 11px 14px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.62);
+      transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+    }
+    .menu-item:hover { background: rgba(255,255,255,0.06); color: #fff; transform: translateX(2px); }
+    .menu-item.active {
+      background: linear-gradient(90deg, rgba(59,130,246,0.22), rgba(59,130,246,0.08));
+      color: #fff;
+      border-left: none;
+      border-radius: 11px;
+      font-weight: 600;
+      box-shadow: inset 0 0 0 1px rgba(99,160,255,0.30), 0 6px 16px rgba(37,99,235,0.18);
+    }
+    .menu-item.active svg { color: #79A8FF; }
+
+    /* ---- Header ---- */
+    main { padding: 38px 44px; gap: 28px; }
+    .header-left h1 { font-family: var(--font-serif); font-size: 30px; letter-spacing: -0.6px; }
+    .date-badge { box-shadow: var(--shadow-sm); font-weight: 500; }
+    .track-toggle { background: #fff; box-shadow: var(--shadow-sm); border-color: var(--line); }
+
+    /* ---- Metric cards: gradient top-accent + clean numbers ---- */
+    .metric-card {
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      padding: 22px 24px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .metric-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--blue), #8Fb8FF);
+      opacity: 0; transition: opacity 0.25s ease;
+    }
+    .metric-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
+    .metric-card:hover::before { opacity: 1; }
+    .metric-title { color: var(--ink-soft); font-size: 11px; letter-spacing: 0.8px; }
+    .metric-val { font-size: 34px; color: var(--ink); }
+
+    /* ---- Cards: softer, larger radius, layered shadow ---- */
+    .white-card {
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      padding: 30px;
+      transition: box-shadow 0.25s ease;
+    }
+    .white-card:hover { box-shadow: var(--shadow-md); }
+    .panel-header h2, .white-card h2 { font-family: var(--font-serif); letter-spacing: -0.4px; }
+
+    /* ---- Sub-score cards ---- */
+    .sub-score-card {
+      border-radius: 14px;
+      background: linear-gradient(180deg, #FBFCFE, #F4F7FC);
+      border: 1px solid var(--line);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .sub-score-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+    .sub-score-val { font-size: 30px; }
+
+    /* ---- Buttons: premium gradient + glow ---- */
+    .btn-action {
+      background: linear-gradient(180deg, #4C90F9, var(--blue-deep));
+      border-radius: 12px;
+      font-weight: 600;
+      box-shadow: 0 1px 2px rgba(37,99,235,0.25), 0 6px 16px rgba(37,99,235,0.22);
+    }
+    .btn-action:hover { filter: none; transform: translateY(-2px); box-shadow: 0 10px 24px rgba(37,99,235,0.30); }
+
+    /* ---- Inputs: cleaner, rounded, soft ---- */
+    .input-handle, textarea.input-handle, input.input-handle {
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+    }
+    .input-handle:focus { box-shadow: 0 0 0 4px rgba(59,130,246,0.14); border-color: var(--blue); }
+
+    /* ---- Platform / pills ---- */
+    .platform-pill { border-radius: 12px; background: #fff; box-shadow: var(--shadow-sm); border-color: var(--line); }
+    .platform-pill.active { background: var(--blue); border-color: var(--blue); box-shadow: 0 4px 12px rgba(59,130,246,0.28); }
+
+    /* ---- Tables ---- */
+    .table-container { border-radius: 14px; box-shadow: var(--shadow-sm); }
+    th { background: #FAFBFE; letter-spacing: 0.8px; }
+    tr:hover td { background: var(--blue-soft); }
+
+    /* ---- Chart containers ---- */
+    .chart-container {
+      border-radius: 16px;
+      background: linear-gradient(180deg, #FBFCFE, #F5F8FD);
+      border: 1px solid var(--line);
+    }
+    .chart-container h3 { font-family: var(--font-serif); }
+
+    /* ---- Library cards ---- */
+    .library-card { border-radius: 16px; box-shadow: var(--shadow-sm); }
+    .library-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+
+    /* ---- Terminal stays mono (intentional) ---- */
+    .dark-terminal { border-radius: 16px; }
+
+    /* Scrollbar polish */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-thumb { background: rgba(120,140,170,0.30); border-radius: 100px; border: 2px solid transparent; background-clip: padding-box; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(120,140,170,0.50); background-clip: padding-box; }
+    aside::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); background-clip: padding-box; }
+  </style>
+</head>
+<body>
+
+  <!-- Page Transition Overlay -->
+  <div class="page-transition-overlay" id="transition-overlay"></div>
+
+  <!-- Sidebar Navigation Drawer -->
+  <aside>
+    <a href="index.html" class="brand-logo" id="logo-nav-link">
+      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round">
+        <circle cx="50" cy="50" r="16" stroke-width="5"/>
+        <circle cx="50" cy="28" r="12" stroke-width="3" opacity="0.5"/>
+        <circle cx="69" cy="39" r="12" stroke-width="3" opacity="0.5"/>
+        <circle cx="69" cy="61" r="12" stroke-width="3" opacity="0.5"/>
+        <circle cx="50" cy="72" r="12" stroke-width="3" opacity="0.5"/>
+        <circle cx="31" cy="61" r="12" stroke-width="3" opacity="0.5"/>
+        <circle cx="31" cy="39" r="12" stroke-width="3" opacity="0.5"/>
+      </svg>
+      <span class="brand-name">Creatrix AI</span>
+    </a>
+
+    <div class="nav-group-label">Intelligence Lab</div>
+    <ul class="sidebar-menu">
+      <li class="menu-item" data-tab="compare">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M21 3l-7 7"/><path d="M3 3l7 7"/><path d="M16 21h5v-5"/><path d="M8 21H3v-5"/><path d="M21 21l-7-7"/><path d="M3 21l7-7"/></svg>
+        <span>Creator Faceoff</span>
+      </li>
+      <li class="menu-item" data-tab="campaign">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+        <span>Campaign ROI</span>
+      </li>
+      <li class="menu-item" data-tab="ratecard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        <span>Rate Card</span>
+      </li>
+    </ul>
+
+    <div class="nav-group-label">Analytics Core</div>
+    <ul class="sidebar-menu">
+      <li class="menu-item active" data-tab="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Command Center</span>
+      </li>
+      <li class="menu-item" data-tab="scorer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+        <span>Ratefluencer Score</span>
+      </li>
+      <li class="menu-item" data-tab="authenticity">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Fraud Radar</span>
+      </li>
+      <li class="menu-item" data-tab="predictor">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+        <span>Growth Forecast</span>
+      </li>
+      <li class="menu-item" data-tab="matcher">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Brand Fit</span>
+      </li>
+    </ul>
+
+    <div class="nav-group-label">Creator Signals</div>
+    <ul class="sidebar-menu">
+      <li class="menu-item" data-tab="trends">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+        <span>Signal Radar</span>
+      </li>
+      <li class="menu-item" data-tab="virality">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <span>Virality Forecast</span>
+      </li>
+      <li class="menu-item" data-tab="scripts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        <span>Pitch Scripts</span>
+      </li>
+      <li class="menu-item" data-tab="reelbuilder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><path d="M7 2v20"/><path d="M17 2v20"/><path d="M2 12h20"/><path d="M2 7h5"/><path d="M2 17h5"/><path d="M17 17h5"/><path d="M17 7h5"/></svg>
+        <span>Reel Lab</span>
+      </li>
+      <li class="menu-item" data-tab="linkedin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <span>LinkedIn Angle</span>
+      </li>
+      <li class="menu-item" data-tab="instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        <span>Instagram Angle</span>
+      </li>
+    </ul>
+
+    <div class="nav-group-label">Reports</div>
+    <ul class="sidebar-menu">
+      <li class="menu-item" data-tab="reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>Score Reports</span>
+      </li>
+      <li class="menu-item" data-tab="library">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <span>Saved Reports</span>
+      </li>
+      <li class="menu-item" data-tab="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Main Panel Container Area -->
+  <main>
+    <header>
+      <div class="header-left">
+        <h1 id="dashboard-title">Overview Panel</h1>
+        <p id="dashboard-subtitle">Real-time machine learning analytics and multi-agent workflow streams</p>
+      </div>
+      <div class="header-right" style="display:flex;align-items:center;gap:14px;">
+        <div class="track-toggle">
+          <button class="track-btn t-active-intel" id="toggle-intel">Influencer Intelligence</button>
+          <button class="track-btn" id="toggle-creator">Viral Creator</button>
+          <button class="track-btn" id="toggle-full">Full Platform</button>
+        </div>
+        <span class="date-badge" id="current-date">June 1, 2026</span>
+      </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- PANEL: COMPARE CREATORS (IQ Tools)         -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-compare">
+      <div class="white-card">
+        <div class="panel-header">
+          <h2>Compare Creators</h2>
+          <p>Run two creators through the live intelligence engine and see who wins on every metric.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+          <input type="text" class="input-handle" id="cmp-handle-a" value="MrBeast" placeholder="Creator A (e.g. MrBeast)">
+          <input type="text" class="input-handle" id="cmp-handle-b" value="mkbhd" placeholder="Creator B (e.g. mkbhd)">
+        </div>
+        <button class="btn-action" id="btn-compare" data-original-text="Compare">Compare</button>
+        <div id="cmp-results" style="margin-top:24px;"></div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL: CAMPAIGN PREDICTOR (IQ Tools)       -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-campaign">
+      <div class="white-card">
+        <div class="panel-header">
+          <h2>Campaign Predictor</h2>
+          <p>Estimate campaign success, reach and engaged audience for a creator in your brand category.</p>
+        </div>
+        <input type="text" class="input-handle" id="camp-handle" value="MrBeast" placeholder="Enter a creator (e.g. MrBeast)" style="margin-bottom:16px;">
+        <div id="camp-category-selector" class="platform-selector">
+          <div class="platform-pill active" data-category="Tech">Tech</div>
+          <div class="platform-pill" data-category="Gaming">Gaming</div>
+          <div class="platform-pill" data-category="Fashion">Fashion</div>
+          <div class="platform-pill" data-category="Finance">Finance</div>
+          <div class="platform-pill" data-category="Lifestyle">Lifestyle</div>
+        </div>
+        <button class="btn-action" id="btn-campaign" data-original-text="Predict Campaign Success">Predict Campaign Success</button>
+        <div id="camp-results" style="margin-top:24px;"></div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL: RATE CARD (Creatrix IQ exclusive)   -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-ratecard">
+      <div class="white-card">
+        <div class="panel-header">
+          <h2>Rate Card</h2>
+          <p>Turn real reach &amp; engagement into a defensible sponsorship price — what this creator should charge per deliverable.</p>
+        </div>
+        <input type="text" class="input-handle" id="ratecard-handle" placeholder="Enter a creator handle" style="margin-bottom:16px;">
+        <button class="btn-action" id="btn-ratecard" data-original-text="Build Rate Card">Build Rate Card</button>
+        <div id="ratecard-meta" style="margin-top:18px;font-family:var(--font-mono,monospace);font-size:12px;color:#64748b;"></div>
+        <div id="ratecard-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:18px;"></div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 1: OVERVIEW TAB                      -->
+    <!-- ========================================== -->
+    <div class="content-panel active" id="panel-overview">
+      <div class="two-col-grid">
+        <!-- Creator Analysis Column -->
+        <div class="white-card">
+          <div class="panel-header">
+            <h2>Creator Intelligence Analysis</h2>
+            <p>Perform an instant search evaluation on creator metrics and predicted benchmarks</p>
+          </div>
+          <div class="search-row">
+            <input type="text" class="input-handle" id="overview-handle-input" value="MrBeast" placeholder="Enter a channel / handle (e.g. MrBeast)">
+            <button class="btn-action" id="btn-overview-analyze">Analyze</button>
+            <button class="btn-action" id="btn-overview-speak" title="Hear the analysis read aloud" style="background: transparent; border: 1px solid var(--border); color: var(--text-dark);">🔊 Speak</button>
+          </div>
+
+          <!-- Analysis Results block -->
+          <div class="creator-profile-result" id="overview-profile-result" style="display: flex; margin-top: 24px; flex-direction: column; gap: 20px;">
+            <div class="result-header" style="display: flex; align-items: center; gap: 16px;">
+              <div class="result-avatar" id="overview-avatar" style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-weight: 700; font-size: 16px; color: var(--white);">AN</div>
+              <div class="result-info">
+                <h3 id="overview-handle-lbl" style="font-family: var(--font-serif); font-size: 16px; font-weight: 600; color: var(--text-dark);">@ankita.creates</h3>
+                <p id="overview-platform-lbl" style="font-size: 13px; color: var(--text-faint);">Instagram · Fashion & Lifestyle</p>
+              </div>
+            </div>
+
+            <!-- 2x2 Score Matrix -->
+            <div class="score-cards-grid">
+              <div class="sub-score-card">
+                <div class="sub-score-label">Ratefluencer Score™</div>
+                <div class="sub-score-val color-blue" id="ov-score-ratefluencer">94</div>
+              </div>
+              <div class="sub-score-card">
+                <div class="sub-score-label">Authenticity</div>
+                <div class="sub-score-val color-green" id="ov-score-authenticity">91</div>
+              </div>
+              <div class="sub-score-card">
+                <div class="sub-score-label">Growth Potential</div>
+                <div class="sub-score-val color-blue" id="ov-score-growth">88</div>
+              </div>
+              <div class="sub-score-card">
+                <div class="sub-score-label">Brand Match</div>
+                <div class="sub-score-val color-purple" id="ov-score-brand">94</div>
+              </div>
+            </div>
+
+            <!-- Double Chart row -->
+            <div class="result-charts">
+              <div class="chart-container">
+                <h3>Growth Forecast</h3>
+                <svg class="chart-svg" viewBox="0 0 200 120">
+                  <path id="ov-growth-line" d="M 10 100 L 40 90 L 70 70 L 100 75 L 130 50 L 160 30" fill="none" stroke="#4F8EF7" stroke-width="2.5"/>
+                  <path id="ov-growth-dash" d="M 160 30 L 190 15" fill="none" stroke="#4F8EF7" stroke-dasharray="3,3" stroke-width="2.5"/>
+                  <circle cx="160" cy="30" r="3" fill="#4F8EF7"/>
+                  <circle cx="190" cy="15" r="3" fill="#4F8EF7"/>
+                  <line x1="10" y1="110" x2="190" y2="110" stroke="var(--border)" stroke-width="1"/>
+                  <text x="10" y="118" font-size="8" fill="var(--text-faint)">Jan</text>
+                  <text x="70" y="118" font-size="8" fill="var(--text-faint)">Mar</text>
+                  <text x="130" y="118" font-size="8" fill="var(--text-faint)">May</text>
+                  <text x="190" y="118" font-size="8" fill="var(--text-faint)">Jul</text>
+                </svg>
+              </div>
+              <div class="chart-container">
+                <h3>Authenticity Risk</h3>
+                <svg class="chart-svg" viewBox="0 0 120 120">
+                  <!-- Hexagon Axes -->
+                  <polygon points="60,10 103,35 103,85 60,110 17,85 17,35" fill="none" stroke="var(--border)" stroke-width="1"/>
+                  <polygon points="60,30 90,47 90,77 60,95 30,77 30,47" fill="none" stroke="var(--border)" stroke-width="0.5"/>
+                  <!-- Core Score polygon -->
+                  <polygon points="60,20 95,43 95,78 60,100 35,74 35,42" fill="rgba(61, 214, 140, 0.2)" stroke="#3DD68C" stroke-width="1.5"/>
+                  <text x="60" y="65" font-family="var(--font-serif)" font-size="12" font-weight="700" fill="#3DD68C" text-anchor="middle">Low Risk</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terminal Output Stream Column -->
+        <div class="white-card">
+          <div class="panel-header">
+            <h2>AI Agent Workflow Stream</h2>
+            <p>Monitors backend multi-agent orchestration logs and viral script generation hooks</p>
+          </div>
+          
+          <div class="dark-terminal" style="margin-bottom: 20px;">
+            <div class="terminal-scroll" id="overview-terminal-logger">
+              <div class="terminal-line"><span class="term-ts">[01:34:57]</span><span class="term-msg system">Scraping trends and metrics...</span></div>
+              <div class="terminal-line"><span class="term-ts">[01:34:58]</span><span class="term-msg">Analyzing audience authenticity...</span></div>
+              <div class="terminal-line"><span class="term-ts">[01:34:59]</span><span class="term-msg">Running XGBoost Ratefluencer Score...</span></div>
+              <div class="terminal-line"><span class="term-ts">[01:35:00]</span><span class="term-msg">Generating optimized reel scripts...</span></div>
+              <div class="terminal-line"><span class="term-ts">[01:35:01]</span><span class="term-msg done">Workflow complete! ✓</span></div>
+            </div>
+          </div>
+
+          <!-- Generated Viral Content Preview -->
+          <div>
+            <h3 style="font-family: var(--font-serif); font-size: 16px; font-weight: 600; color: var(--text-dark); margin-bottom: 16px;">Generated Viral Content</h3>
+            <div class="script-block" style="background: #FFFDF5; border-left: 3px solid var(--amber);">
+              <span class="script-block-pill" style="background: #FFF3E0; color: var(--amber);">HOOK</span>
+              <div class="script-block-text">"Stop scrolling — AI just changed everything..."</div>
+            </div>
+            <div class="script-block" style="background: #F8FAFF; border-left: 3px solid var(--blue);">
+              <span class="script-block-pill" style="background: #E8F0FE; color: var(--blue);">STORY</span>
+              <div class="script-block-text">"Here's what nobody's telling you about influence..."</div>
+            </div>
+            <div class="script-block" style="background: #F5FDF9; border-left: 3px solid var(--green);">
+              <span class="script-block-pill" style="background: #E8FDF3; color: var(--green);">INSIGHT</span>
+              <div class="script-block-text">"Brands using AI see 3× higher engagement..."</div>
+            </div>
+            <div class="script-block" style="background: #FAF5FF; border-left: 3px solid var(--purple);">
+              <span class="script-block-pill" style="background: #F3E8FD; color: var(--purple);">CTA</span>
+              <div class="script-block-text">"Follow @creatrix.ai for your AI creator playbook"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 2: INFLUENCER SCORER                 -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-scorer">
+      <div class="two-col-60-40">
+        <!-- Input & Results Column -->
+        <div class="white-card">
+          <div class="panel-header">
+            <h2>Influencer Intelligence Engine</h2>
+            <p>Analyze any creator profile with AI models & audit authenticity</p>
+          </div>
+          <div id="scorer-platform-selector" class="platform-selector">
+            <div class="platform-pill" data-platform="instagram">Instagram</div>
+            <div class="platform-pill" data-platform="tiktok">TikTok</div>
+            <div class="platform-pill active" data-platform="youtube">YouTube</div>
+            <div class="platform-pill" data-platform="linkedin">LinkedIn</div>
+          </div>
+          <div class="search-row">
+            <input type="text" class="input-handle" id="scorer-handle-input" value="MrBeast" placeholder="Enter a channel / handle (e.g. MrBeast)">
+            <button class="btn-action" id="btn-scorer-analyze" data-original-text="Deep Analyze →">Deep Analyze →</button>
+          </div>
+
+          <!-- Detailed Result Container -->
+          <div class="white-card" style="margin-top: 24px; background: var(--light-bg); border-radius: 12px; padding: 20px; box-shadow: none;">
+            <div class="result-header" style="margin-bottom: 20px;">
+              <div id="scorer-avatar" class="result-avatar">AK</div>
+              <div class="result-info">
+                <h3 id="scorer-handle-display">@ankita.creates</h3>
+                <p id="scorer-platform-niche">Instagram · Fashion &amp; Lifestyle</p>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+              <div>
+                <span style="font-size: 11px; color: var(--text-faint); text-transform: uppercase;">Followers</span>
+                <div id="scorer-followers" style="font-family: var(--font-serif); font-size: 20px; font-weight: 700;">2.4M</div>
+              </div>
+              <div>
+                <span style="font-size: 11px; color: var(--text-faint); text-transform: uppercase;">Avg. Likes</span>
+                <div id="scorer-avg-likes" style="font-family: var(--font-serif); font-size: 20px; font-weight: 700;">87K</div>
+              </div>
+              <div>
+                <span style="font-size: 11px; color: var(--text-faint); text-transform: uppercase;">Engagement</span>
+                <div id="scorer-engagement" style="font-family: var(--font-serif); font-size: 20px; font-weight: 700;">6.8%</div>
+              </div>
+            </div>
+
+            <!-- Metric bars -->
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                  <span>Authenticity Score</span>
+                  <span id="scorer-auth-pct" class="color-green">91%</span>
+                </div>
+                <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;">
+                  <div id="scorer-auth-bar" style="width: 91%; height: 100%; background: var(--green);"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                  <span>Engagement Quality</span>
+                  <span id="scorer-eng-pct" class="color-blue">87%</span>
+                </div>
+                <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;">
+                  <div id="scorer-eng-bar" style="width: 87%; height: 100%; background: var(--blue);"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                  <span>Follower Growth</span>
+                  <span id="scorer-growth-pct" class="color-blue">73%</span>
+                </div>
+                <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;">
+                  <div id="scorer-growth-bar" style="width: 73%; height: 100%; background: var(--blue);"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                  <span>Brand Match</span>
+                  <span id="scorer-brand-pct" class="color-purple">82%</span>
+                </div>
+                <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;">
+                  <div id="scorer-brand-bar" style="width: 82%; height: 100%; background: var(--purple);"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Centered Master Score Circle -->
+            <div class="white-card" style="margin-top: 24px; padding: 24px; text-align: center; box-shadow: none;">
+              <span style="font-size: 12px; font-weight: 600; color: var(--text-faint); text-transform: uppercase;">Master Score</span>
+              <div id="scorer-master-score" style="font-family: var(--font-serif); font-size: 64px; font-weight: 800; color: var(--blue); line-height: 1.1;">94</div>
+              <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">/100 Ratefluencer Score™</div>
+              <div style="display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;">
+                <span id="scorer-badge-eng" class="badge badge-info" style="font-size: 11px;">Engagement 96</span>
+                <span id="scorer-badge-auth" class="badge badge-success" style="font-size: 11px;">Authenticity 91</span>
+                <span id="scorer-badge-growth" class="badge badge-info" style="font-size: 11px;">Growth 88</span>
+                <span id="scorer-badge-brand" class="badge badge-warning" style="font-size: 11px;">Brand 94</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Column -->
+        <div>
+          <!-- Growth Forecast Card -->
+          <div class="white-card">
+            <div class="panel-header">
+              <h2>Growth Forecast</h2>
+            </div>
+            <div class="chart-container">
+              <svg class="chart-svg" style="height: 200px;" viewBox="0 0 300 200">
+                <!-- Area path fill -->
+                <path id="scorer-growth-area" d="M 20 180 L 70 150 L 120 120 L 170 135 L 220 90 L 270 45 L 270 180 Z" fill="rgba(79, 142, 247, 0.08)"/>
+                <!-- Line path -->
+                <path id="scorer-growth-line" d="M 20 180 L 70 150 L 120 120 L 170 135 L 220 90 L 270 45" fill="none" stroke="#4F8EF7" stroke-width="3"/>
+                <!-- Prediction dotted line -->
+                <path d="M 220 90 L 270 45" fill="none" stroke="#4F8EF7" stroke-dasharray="4,4" stroke-width="3"/>
+                <circle cx="220" cy="90" r="5" fill="#4F8EF7"/>
+                <circle cx="270" cy="45" r="5" fill="#4F8EF7"/>
+                <!-- Gridlines -->
+                <line x1="20" y1="180" x2="280" y2="180" stroke="var(--border)" stroke-width="1.5"/>
+                <line x1="20" y1="130" x2="280" y2="130" stroke="var(--border)" stroke-dasharray="2,2" stroke-width="1"/>
+                <line x1="20" y1="80" x2="280" y2="80" stroke="var(--border)" stroke-dasharray="2,2" stroke-width="1"/>
+              </svg>
+            </div>
+            <div style="font-size: 13px; color: var(--green); font-weight: 500; margin-top: 12px; display: flex; align-items: center; gap: 4px;">
+              ↑ +340% predicted in 6 months
+            </div>
+          </div>
+
+          <!-- Audience Authenticity Card -->
+          <div class="white-card">
+            <div class="panel-header">
+              <h2>Audience Authenticity</h2>
+            </div>
+            <div class="chart-container" style="background: var(--light-bg); display: flex; justify-content: center; padding: 24px 0;">
+              <!-- Radar hex SVG -->
+              <svg viewBox="0 0 260 260" style="width: 200px; height: 200px;">
+                <polygon points="130,20 225,75 225,185 130,240 35,185 35,75" fill="none" stroke="var(--border)" stroke-width="1.5"/>
+                <polygon points="130,50 200,90 200,170 130,210 60,170 60,90" fill="none" stroke="var(--border)" stroke-width="1"/>
+                <polygon points="130,80 176,106 176,154 130,180 84,154 84,106" fill="none" stroke="var(--border)" stroke-width="0.5"/>
+                <!-- Creator polygon -->
+                <polygon points="130,30 215,82 205,160 130,220 50,165 45,85" fill="rgba(61, 214, 140, 0.2)" stroke="#3DD68C" stroke-width="2"/>
+              </svg>
+            </div>
+            <div style="font-size: 13px; color: var(--green); font-weight: 500; margin-top: 12px; text-align: center;">
+              91/100 Authentic Followers (Safe Cluster)
+            </div>
+          </div>
+
+          <!-- Brand Match Card -->
+          <div class="white-card">
+            <div class="panel-header">
+              <h2>Best Brand Partnerships</h2>
+            </div>
+            <div id="scorer-brand-list" style="display: flex; flex-direction: column; gap: 12px;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 500; margin-bottom: 4px;">
+                  <span>Nike</span>
+                  <span style="font-family: var(--font-mono);">96%</span>
+                </div>
+                <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;">
+                  <div style="width: 96%; height: 100%; background: var(--blue);"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 500; margin-bottom: 4px;">
+                  <span>Spotify</span>
+                  <span style="font-family: var(--font-mono);">94%</span>
+                </div>
+                <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;">
+                  <div style="width: 94%; height: 100%; background: var(--blue);"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 500; margin-bottom: 4px;">
+                  <span>Sephora</span>
+                  <span style="font-family: var(--font-mono);">82%</span>
+                </div>
+                <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;">
+                  <div style="width: 82%; height: 100%; background: var(--blue);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 3: GROWTH PREDICTOR                  -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-predictor">
+      <div class="white-card">
+        <div class="panel-header">
+          <h2>Growth Prediction Engine</h2>
+          <p>Machine learning projection model predicting follower velocity curves</p>
+        </div>
+        <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+          <input type="text" class="input-handle" style="max-width: 320px; margin-bottom: 0;" id="pred-handle" value="MrBeast">
+          <div class="platform-selector" style="margin-bottom: 0; align-items: center;">
+            <div class="platform-pill">3 Months</div>
+            <div class="platform-pill active">6 Months</div>
+            <div class="platform-pill">12 Months</div>
+          </div>
+          <button class="btn-action" id="btn-predict-growth">Predict Growth</button>
+        </div>
+
+        <!-- Big Projection SVG Chart -->
+        <div class="chart-container" style="height: 340px; padding: 28px;">
+          <h3>Follower Growth Projection</h3>
+          <svg class="chart-svg" style="height: 240px; width: 100%;" viewBox="0 0 600 240">
+            <!-- Gridlines -->
+            <line x1="40" y1="40" x2="560" y2="40" stroke="var(--border)" stroke-dasharray="2,2"/>
+            <line x1="40" y1="100" x2="560" y2="100" stroke="var(--border)" stroke-dasharray="2,2"/>
+            <line x1="40" y1="160" x2="560" y2="160" stroke="var(--border)" stroke-dasharray="2,2"/>
+            <line x1="40" y1="210" x2="560" y2="210" stroke="var(--border)" stroke-width="1.5"/>
+
+            <!-- Confidence Bounds Shaded Area -->
+            <path id="pred-growth-area" d="M 300 135 L 350 110 L 400 95 L 450 70 L 500 50 L 550 30 L 550 90 L 500 110 L 450 130 L 400 150 L 350 160 L 300 135 Z" fill="rgba(79, 142, 247, 0.08)"/>
+
+            <!-- Solid Historical Line -->
+            <path id="pred-growth-line" d="M 40 200 L 90 190 L 140 170 L 190 160 L 240 145 L 300 135" fill="none" stroke="#4F8EF7" stroke-width="3"/>
+            <!-- Predicted Dash Line -->
+            <path id="pred-growth-dash" d="M 300 135 L 350 130 L 400 118 L 450 95 L 500 80 L 550 60" fill="none" stroke="#4F8EF7" stroke-dasharray="4,4" stroke-width="3"/>
+
+            <circle cx="300" cy="135" r="5" fill="#4F8EF7"/>
+            <!-- Today Marker line -->
+            <line x1="300" y1="20" x2="300" y2="210" stroke="#4F8EF7" stroke-dasharray="3,3" stroke-width="1"/>
+            <text x="305" y="32" font-size="10" fill="#4F8EF7" font-weight="600">Today</text>
+          </svg>
+        </div>
+
+        <!-- 3 Stats cards below -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 24px;">
+          <div class="sub-score-card">
+            <div class="sub-score-label">Current Followers</div>
+            <div class="sub-score-val">2.4M</div>
+          </div>
+          <div class="sub-score-card" style="background: rgba(79, 142, 247, 0.05); border-color: var(--blue);">
+            <div class="sub-score-label">Predicted (6m)</div>
+            <div class="sub-score-val color-blue">8.2M</div>
+          </div>
+          <div class="sub-score-card">
+            <div class="sub-score-label">Growth Rate</div>
+            <div class="sub-score-val color-green">+340%</div>
+          </div>
+        </div>
+
+        <!-- Drivers list -->
+        <div style="margin-top: 32px;">
+          <h3 style="font-family: var(--font-serif); font-size: 16px; font-weight: 600; margin-bottom: 16px;">Key Growth Drivers</h3>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+            <div class="sub-score-card" style="text-align: left; padding: 20px;">
+              <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px;">
+                <span>Content Cadence</span>
+                <span class="color-blue">88/100</span>
+              </div>
+              <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;"><div style="width: 88%; height: 100%; background: var(--blue);"></div></div>
+            </div>
+            <div class="sub-score-card" style="text-align: left; padding: 20px;">
+              <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px;">
+                <span>Engagement Depth</span>
+                <span class="color-blue">91/100</span>
+              </div>
+              <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;"><div style="width: 91%; height: 100%; background: var(--blue);"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 4: AUTHENTICITY CHECK                -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-authenticity">
+      <div class="two-col-grid">
+        <!-- Radar & break downs -->
+        <div class="white-card">
+          <div class="panel-header">
+            <h2>Authenticity Metrics</h2>
+            <p>Compare creator's signals against typical algorithmic danger patterns</p>
+          </div>
+          
+          <div class="arc-gauge-box" style="margin-bottom: 28px;">
+            <svg class="donut-svg" viewBox="0 0 120 120" style="width: 140px; height: 140px;">
+              <circle cx="60" cy="60" r="45" class="donut-track"/>
+              <circle cx="60" cy="60" r="45" class="donut-segment" id="auth-donut-seg" stroke="#3DD68C" stroke-dashoffset="26"/>
+            </svg>
+            <div style="position: absolute; text-align: center;">
+              <div id="auth-authentic-score" style="font-family: var(--font-serif); font-size: 28px; font-weight: 800; color: var(--green);">91</div>
+              <div style="font-size: 11px; color: var(--text-faint); text-transform: uppercase;">Authentic</div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 14px; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+              <span>✓ Follower Growth Natural</span>
+              <span class="badge badge-success">Safe</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 14px; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+              <span>✓ Engagement Patterns Organic</span>
+              <span class="badge badge-success">Safe</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 14px; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+              <span>⚠ Engagement Pod Detected</span>
+              <span class="badge badge-warning">Monitor</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail Cards -->
+        <div>
+          <div class="white-card">
+            <div class="panel-header">
+              <h2>Fake Follower Estimate</h2>
+            </div>
+            <div id="auth-fake-pct" style="font-family: var(--font-serif); font-size: 48px; font-weight: 700; color: var(--green);">2.1%</div>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Estimated fake followers</p>
+            <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden; margin-bottom: 12px;">
+              <div id="auth-fake-bar" style="width: 2.1%; height: 100%; background: var(--red);"></div>
+            </div>
+            <p id="auth-verdict-line" style="font-size: 13px; color: var(--text-muted);">Industry average: 12% — Creator is clean ✓</p>
+          </div>
+
+          <div class="white-card">
+            <div class="panel-header">
+              <h2>Comment Quality Analysis</h2>
+            </div>
+            <div style="display: flex; align-items: center; gap: 20px;">
+              <svg viewBox="0 0 100 100" style="width: 70px; height: 70px;">
+                <circle cx="50" cy="50" r="40" fill="none" stroke="var(--border)" stroke-width="12"/>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="var(--green)" stroke-width="12" stroke-dasharray="251" stroke-dashoffset="32"/>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="var(--amber)" stroke-width="12" stroke-dasharray="251" stroke-dashoffset="220" stroke-dasharray="25"/>
+              </svg>
+              <div style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+                <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; background: var(--green); border-radius: 50%;"></span> Genuine: 87%</div>
+                <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; background: var(--amber); border-radius: 50%;"></span> Generic/Spam: 8%</div>
+                <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; background: var(--red); border-radius: 50%;"></span> Bots: 5%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 5: BRAND MATCHER                     -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-matcher">
+      <div class="white-card">
+        <div class="panel-header">
+          <h2>Brand Matching System (RAG)</h2>
+          <p>Retrieve brand alignment nodes matches using Pinecone vector space embedding distances</p>
+        </div>
+
+        <div class="two-col-equal">
+          <!-- Graph visualization -->
+          <div class="chart-container" style="background: var(--light-bg); display: flex; justify-content: center; height: 380px; align-items: center;">
+            <svg viewBox="0 0 380 380" style="width: 320px; height: 320px;">
+              <!-- Network links -->
+              <line x1="190" y1="190" x2="190" y2="70" stroke="var(--blue)" stroke-width="2.5"/>
+              <line x1="190" y1="190" x2="280" y2="130" stroke="var(--blue)" stroke-width="2"/>
+              <line x1="190" y1="190" x2="270" y2="250" stroke="var(--blue)" stroke-width="1.5" stroke-opacity="0.6"/>
+              <line x1="190" y1="190" x2="100" y2="240" stroke="var(--blue)" stroke-width="1" stroke-opacity="0.4"/>
+              
+              <!-- Center Node -->
+              <circle cx="190" cy="190" r="30" fill="url(#centerNodeGrad)"/>
+              <text x="190" y="194" fill="white" font-weight="700" font-size="10" text-anchor="middle">CREATOR</text>
+
+              <!-- Outer nodes -->
+              <circle cx="190" cy="70" r="22" fill="var(--white)" stroke="var(--blue)" stroke-width="2"/>
+              <text x="190" y="74" font-size="9" font-weight="600" text-anchor="middle">Nike</text>
+
+              <circle cx="280" cy="130" r="20" fill="var(--white)" stroke="var(--blue)" stroke-width="1.5"/>
+              <text x="280" y="134" font-size="9" font-weight="600" text-anchor="middle">Spotify</text>
+
+              <circle cx="270" cy="250" r="18" fill="var(--white)" stroke="var(--blue)" stroke-width="1.2"/>
+              <text x="270" y="254" font-size="9" font-weight="600" text-anchor="middle">Sephora</text>
+
+              <circle cx="100" cy="240" r="16" fill="var(--white)" stroke="var(--blue)" stroke-width="1"/>
+              <text x="100" y="244" font-size="9" font-weight="600" text-anchor="middle">Zara</text>
+
+              <!-- Definitions -->
+              <defs>
+                <linearGradient id="centerNodeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#4F8EF7" />
+                  <stop offset="100%" stop-color="#A78BFA" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <!-- Matching List -->
+          <div>
+            <h3 style="font-family: var(--font-serif); font-size: 16px; font-weight: 600; margin-bottom: 16px;">Top Brand Matches</h3>
+            <div id="matcher-brand-list" style="display: flex; flex-direction: column; gap: 12px;">
+              <div class="white-card" style="padding: 16px; margin-bottom: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <strong style="font-family: var(--font-serif); font-size: 15px;">Nike</strong>
+                  <span class="badge badge-success">96% match</span>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted);">Highly aligned content style, audience demographics overlap by 87%.</p>
+              </div>
+              <div class="white-card" style="padding: 16px; margin-bottom: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <strong style="font-family: var(--font-serif); font-size: 15px;">Spotify</strong>
+                  <span class="badge badge-success">94% match</span>
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted);">Creator's niche engagement aligns strongly with Spotify's target campaign.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 6: TREND DISCOVERY                   -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-trends">
+      <div class="two-col-grid">
+        <!-- Feed column -->
+        <div class="interactive-list-feed" id="trend-feed-items">
+          <!-- Item 1 -->
+          <div class="trend-row-item active" data-trend-index="0">
+            <div class="trend-main-info">
+              <div class="trend-header-pill">
+                <span class="trend-rank">#1</span>
+                <span class="trend-title">AI replacing Content Creators</span>
+                <span class="badge badge-info" style="font-size: 10px; padding: 2px 6px;">Tech</span>
+              </div>
+              <div class="trend-sources-pills">
+                <span class="source-mini-tag">Reddit</span>
+                <span class="source-mini-tag">NewsAPI</span>
+              </div>
+            </div>
+            <div class="trend-meta-stats">
+              <span class="trend-row-score">94</span>
+              <span class="trend-growth-percent">↑ +340%</span>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="trend-row-item" data-trend-index="1">
+            <div class="trend-main-info">
+              <div class="trend-header-pill">
+                <span class="trend-rank">#2</span>
+                <span class="trend-title">Micro-influencer vs mega ROI</span>
+                <span class="badge badge-info" style="font-size: 10px; padding: 2px 6px;">Marketing</span>
+              </div>
+              <div class="trend-sources-pills">
+                <span class="source-mini-tag">LinkedIn</span>
+              </div>
+            </div>
+            <div class="trend-meta-stats">
+              <span class="trend-row-score">88</span>
+              <span class="trend-growth-percent">↑ +210%</span>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="trend-row-item" data-trend-index="2">
+            <div class="trend-main-info">
+              <div class="trend-header-pill">
+                <span class="trend-rank">#3</span>
+                <span class="trend-title">Reels vs TikTok algorithm 2026</span>
+                <span class="badge badge-info" style="font-size: 10px; padding: 2px 6px;">Social</span>
+              </div>
+              <div class="trend-sources-pills">
+                <span class="source-mini-tag">YouTube</span>
+              </div>
+            </div>
+            <div class="trend-meta-stats">
+              <span class="trend-row-score">85</span>
+              <span class="trend-growth-percent">↑ +180%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail Column -->
+        <div class="white-card" id="trend-details-pane">
+          <div class="panel-header">
+            <span class="badge badge-info" id="trend-det-cat" style="margin-bottom: 8px;">Tech</span>
+            <h2 id="trend-det-title" style="font-size: 24px;">AI replacing Content Creators</h2>
+            <p style="margin-top: 6px;">Ranked #1 on viral velocity monitoring</p>
+          </div>
+
+          <div class="arc-gauge-box" style="margin-bottom: 24px;">
+            <svg class="arc-svg">
+              <path d="M 20 90 A 65 65 0 0 1 140 90" class="arc-bg"/>
+              <path d="M 20 90 A 65 65 0 0 1 140 90" class="arc-fill" id="trend-arc-fill" stroke-dashoffset="20"/>
+            </svg>
+            <div class="arc-value" id="trend-det-score">94</div>
+            <div class="arc-label">Trend Velocity</div>
+          </div>
+
+          <!-- Contributing factors list -->
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                <span>Growth Velocity</span>
+                <span class="color-blue">88%</span>
+              </div>
+              <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;"><div style="width: 88%; height: 100%; background: var(--blue);"></div></div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                <span>Engagement Potential</span>
+                <span class="color-blue">92%</span>
+              </div>
+              <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;"><div style="width: 92%; height: 100%; background: var(--blue);"></div></div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button class="btn-action" style="flex: 1;" id="btn-trend-gen-script">Generate Script</button>
+            <button class="btn-action" style="flex: 1; background: transparent; border: 1px solid var(--border); color: var(--text-dark);" id="btn-refresh-trends" data-original-text="Refresh Trends">Refresh Trends</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 7: SCRIPT GENERATOR                  -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-scripts">
+      <div class="two-col-grid">
+        <!-- Input controls -->
+        <div class="white-card">
+          <div class="panel-header">
+            <h2>Generate Script</h2>
+            <p>Produce optimized reel content structure from raw topics</p>
+          </div>
+
+          <label style="font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;">TOPIC OR ARTICLE URL</label>
+          <textarea id="script-topic-input" class="input-handle" style="height: 120px; border-radius: 12px; resize: none; margin-bottom: 20px;" placeholder="Enter theme (e.g. AI tools for content creators)...">AI tools for content creators</textarea>
+
+          <label style="font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;">DURATION</label>
+          <div id="script-duration-selector" class="platform-selector">
+            <div class="platform-pill" data-duration="15">15s</div>
+            <div class="platform-pill active" data-duration="30">30s</div>
+            <div class="platform-pill" data-duration="45">45s</div>
+            <div class="platform-pill" data-duration="60">60s</div>
+          </div>
+
+          <label style="font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;">CONTENT STYLE</label>
+          <div id="script-style-selector" class="style-pill-grid">
+            <div class="style-pill-card active" data-style="hooks">Hooks &amp; Story</div>
+            <div class="style-pill-card" data-style="educational">Educational</div>
+            <div class="style-pill-card" data-style="controversy">Controversy</div>
+            <div class="style-pill-card" data-style="motivational">Motivational</div>
+          </div>
+
+          <button class="btn-action" style="width: 100%;" id="btn-generate-script" data-original-text="Generate Script →">Generate Script →</button>
+        </div>
+
+        <!-- Output display -->
+        <div class="white-card">
+          <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h2>Generated Script</h2>
+              <p>Ready to copy or export to building stage</p>
+            </div>
+            <span class="badge badge-info">30 sec</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="script-block" style="background: #FFFDF5; border-left: 4px solid var(--amber);">
+              <span class="script-block-pill" style="background: #FFF3E0; color: var(--amber);">HOOK</span>
+              <div id="script-out-hook" class="script-block-text">"Stop scrolling — AI just changed the creator game forever. What happens next will shock most brands..."</div>
+              <span class="script-block-time">0–5 sec</span>
+            </div>
+            <div class="script-block" style="background: #F8FAFF; border-left: 4px solid var(--blue);">
+              <span class="script-block-pill" style="background: #E8F0FE; color: var(--blue);">STORY</span>
+              <div id="script-out-story" class="script-block-text">"Brands are now using AI to predict which creators will blow up BEFORE they become mainstream. Here's exactly how it works..."</div>
+              <span class="script-block-time">5–20 sec</span>
+            </div>
+            <div class="script-block" style="background: #F5FDF9; border-left: 4px solid var(--green);">
+              <span class="script-block-pill" style="background: #E8FDF3; color: var(--green);">INSIGHT</span>
+              <div id="script-out-insight" class="script-block-text">"Companies using AI influencer scoring see 3x higher campaign ROI. The data doesn't lie..."</div>
+              <span class="script-block-time">20–25 sec</span>
+            </div>
+            <div class="script-block" style="background: #FAF5FF; border-left: 4px solid var(--purple);">
+              <span class="script-block-pill" style="background: #F3E8FD; color: var(--purple);">CTA</span>
+              <div id="script-out-cta" class="script-block-text">"Follow @creatrix.ai and get the full AI creator intelligence playbook — link in bio 👇"</div>
+              <span class="script-block-time">25–30 sec</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 8: REEL BUILDER                      -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-reelbuilder">
+      <div class="three-col-grid">
+        <!-- Controls -->
+        <div class="white-card">
+          <div class="panel-header">
+            <h2>Build Reel</h2>
+            <p>Assemble voice overlays and visuals</p>
+          </div>
+
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-faint); display: block; margin-bottom: 8px;">SELECT VOICE (ELEVENLABS)</label>
+          <div class="voice-selection-grid">
+            <div class="voice-option-card active">
+              <div class="voice-opt-left">
+                <button class="btn-play-voice">▶</button>
+                <div>
+                  <div class="voice-opt-name">Nova</div>
+                  <span class="voice-opt-style">Natural</span>
+                </div>
+              </div>
+              <span class="voice-opt-rating">★★★★★</span>
+            </div>
+            <div class="voice-option-card">
+              <div class="voice-opt-left">
+                <button class="btn-play-voice">▶</button>
+                <div>
+                  <div class="voice-opt-name">Echo</div>
+                  <span class="voice-opt-style">Professional</span>
+                </div>
+              </div>
+              <span class="voice-opt-rating">★★★★☆</span>
+            </div>
+          </div>
+
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-faint); display: block; margin-bottom: 8px;">VISUAL THEME</label>
+          <div class="thumbnails-2x2">
+            <div class="thumb-card active">
+              <div class="thumb-card-overlay"></div>
+              <span>Cinematic Dark</span>
+            </div>
+            <div class="thumb-card">
+              <div class="thumb-card-overlay"></div>
+              <span>Neon Cyber</span>
+            </div>
+            <div class="thumb-card">
+              <div class="thumb-card-overlay"></div>
+              <span>Clean White</span>
+            </div>
+            <div class="thumb-card">
+              <div class="thumb-card-overlay"></div>
+              <span>Nature</span>
+            </div>
+          </div>
+
+          <button class="btn-action" style="width: 100%; background: linear-gradient(135deg, var(--blue), var(--purple));" id="btn-build-reel">Generate Reel →</button>
+        </div>
+
+        <!-- Phone Preview Mockup Frame -->
+        <div class="white-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <div class="phone-container">
+            <div class="phone-notch"></div>
+            <div class="phone-score-badge">87 🔥</div>
+            <div class="phone-screen">
+              <div class="phone-bars-row">
+                <div class="phone-bar-segment"><div class="phone-bar-fill" id="reel-play-progress" style="width: 0%;"></div></div>
+                <div class="phone-bar-segment"></div>
+                <div class="phone-bar-segment"></div>
+              </div>
+              <div class="phone-header">@creatrix.ai</div>
+              
+              <div class="phone-center-art">
+                <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4">
+                  <circle cx="50" cy="50" r="20" />
+                  <polygon points="45,40 62,50 45,60" fill="currentColor"/>
+                </svg>
+              </div>
+
+              <div class="phone-caption-box">
+                <div class="phone-caption-handle">@creatrix.ai</div>
+                <div class="phone-caption-text" id="phone-text-caption">AI just changed the creator game 🤖</div>
+                <div class="phone-caption-tags">#AICreator #Creatrix AI</div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-play-voice" style="width: 48px; height: 48px; font-size: 16px; margin-top: 16px;" id="btn-play-preview-reel">▶</button>
+          <div style="width: 100%; margin-top: 12px; height: 4px; background: var(--border); border-radius: 100px; position: relative;">
+            <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: var(--blue);" id="timeline-scrubber"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; width: 100%; font-size: 11px; color: var(--text-faint); margin-top: 6px;">
+            <span id="curr-time-lbl">0:00</span>
+            <span>0:45</span>
+          </div>
+        </div>
+
+        <!-- Output Analytics -->
+        <div class="white-card">
+          <div class="panel-header">
+            <h2>Virality Score</h2>
+          </div>
+
+          <div class="arc-gauge-box" style="margin-bottom: 24px; background: rgba(79, 142, 247, 0.05); padding: 20px; border-radius: 12px;">
+            <svg class="arc-svg">
+              <path d="M 20 90 A 65 65 0 0 1 140 90" class="arc-bg" />
+              <path d="M 20 90 A 65 65 0 0 1 140 90" class="arc-fill" id="reel-arc-fill" stroke-dashoffset="30" />
+            </svg>
+            <div class="arc-value">87</div>
+            <div class="arc-label" style="bottom: 12px;">High Potential</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 500;">
+              <span>👁️ Expected Views</span>
+              <strong style="font-family: var(--font-mono); color: var(--blue);">2.4M</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 500;">
+              <span>❤️ Expected Likes</span>
+              <strong style="font-family: var(--font-mono); color: var(--blue);">180K</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 500;">
+              <span>📤 Expected Shares</span>
+              <strong style="font-family: var(--font-mono); color: var(--blue);">42K</strong>
+            </div>
+          </div>
+
+          <button class="btn-action" style="width: 100%; margin-top: 24px;">Download MP4</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 9: LINKEDIN AI                       -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-linkedin">
+      <div class="two-col-equal">
+        <div class="white-card">
+          <div class="panel-header">
+            <h2>LinkedIn content writer</h2>
+            <p>Formulate highly viral thought leadership content structures</p>
+          </div>
+          <label style="font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;">TOPIC OR SENTIMENT</label>
+          <textarea id="linkedin-topic-input" class="input-handle" style="height: 120px; border-radius: 12px; resize: none; margin-bottom: 20px;" placeholder="CMOs and creator marketing..."></textarea>
+          <button class="btn-action" style="width: 100%;" id="btn-generate-linkedin" data-original-text="Generate LinkedIn Post →">Generate LinkedIn Post →</button>
+        </div>
+
+        <!-- Preview Mockup Card -->
+        <div class="white-card" style="border-color: #E2E6ED; box-shadow: 0 4px 16px rgba(0,0,0,0.06); padding: 24px;">
+          <div class="result-header" style="margin-bottom: 16px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: #0A66C2; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">VN</div>
+            <div>
+              <h4 style="font-size: 14px; font-weight: 700; color: var(--text-dark);">Creatrix AI AI</h4>
+              <p style="font-size: 12px; color: var(--text-faint);">AI Platform · Just now</p>
+            </div>
+          </div>
+          <p id="linkedin-out-text" style="font-size: 14px; line-height: 1.6; color: var(--text-dark); margin-bottom: 12px;">
+            The creator economy is being rewritten by AI.<br><br>
+            Here's what smart brands are doing differently in 2026...
+          </p>
+          <div id="linkedin-out-hashtags" style="font-size: 12px; color: #0A66C2; margin-bottom: 16px;">#CreatorEconomy #AIMarketing #Creatrix AI</div>
+          <div style="display: flex; gap: 12px; font-size: 12px; color: var(--text-faint); border-top: 1px solid var(--border); padding-top: 12px;">
+            <span>👍 142 Likes</span>
+            <span>💬 38 Comments</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 10: INSTAGRAM AI                     -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-instagram">
+      <div class="two-col-equal">
+        <div class="white-card">
+          <div class="panel-header">
+            <h2>Instagram Caption Tool</h2>
+            <p>Optimized caption copy with correct linebreaks</p>
+          </div>
+          <textarea id="instagram-topic-input" class="input-handle" style="height: 120px; border-radius: 12px; resize: none; margin-bottom: 20px;" placeholder="The algorithm rewards authenticity..."></textarea>
+          <button class="btn-action" style="width: 100%;" id="btn-generate-instagram" data-original-text="Generate Caption →">Generate Caption →</button>
+        </div>
+
+        <div class="white-card" style="padding: 24px;">
+          <div id="instagram-image-preview" style="background: linear-gradient(135deg, #667eea, #764ba2, #f093fb); border-radius: 12px; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; margin-bottom: 16px; background-size: cover; background-position: center; text-align: center; font-size: 13px; overflow: hidden;">
+            IMAGE PREVIEW
+          </div>
+          <div style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 6px;">@creatrix.ai</div>
+          <p id="instagram-out-caption" style="font-size: 13px; line-height: 1.5; color: var(--text-dark);">
+            The algorithm rewards authenticity 🤖✨<br><br>
+            Stop chasing vanity metrics. Here's how creators are using AI to stay real...
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 11: VIRALITY PREDICTOR               -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-virality">
+      <div class="white-card">
+        <div class="panel-header">
+          <h2>Virality Prediction Engine</h2>
+          <p>Estimate content execution value boundaries before pushing live</p>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label style="font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;">PASTE YOUR SCRIPT OR HOOK TO ANALYZE</label>
+          <textarea id="virality-script-input" class="input-handle" style="height: 100px; border-radius: 12px; resize: none; margin-bottom: 12px;" placeholder="Enter your script, hook, or caption text...">Stop scrolling — AI just changed the creator game forever. Here's what nobody is telling you about influence in 2026...</textarea>
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <div class="platform-selector" style="margin-bottom: 0;">
+              <div class="platform-pill active" data-platform="instagram">Instagram</div>
+              <div class="platform-pill" data-platform="tiktok">TikTok</div>
+              <div class="platform-pill" data-platform="youtube">YouTube</div>
+            </div>
+            <button class="btn-action" id="btn-predict-virality" data-original-text="Predict Virality →" style="margin-left: auto;">Predict Virality →</button>
+          </div>
+        </div>
+
+        <div class="two-col-grid">
+          <div class="white-card" style="box-shadow: none; border-color: var(--border); padding: 20px;">
+            <div class="arc-gauge-box" style="margin-bottom: 24px;">
+              <svg class="arc-svg" style="width: 240px; height: 140px;">
+                <path d="M 30 120 A 90 90 0 0 1 210 120" class="arc-bg" style="stroke-width: 16;"/>
+                <path d="M 30 120 A 90 90 0 0 1 210 120" class="arc-fill" id="virality-arc-fill" style="stroke-width: 16; stroke-dasharray: 300; stroke-dashoffset: 300;" stroke-dashoffset="39"/>
+              </svg>
+              <div id="virality-score-val" class="arc-value" style="font-size: 48px; bottom: 30px;">87</div>
+              <div id="virality-grade-lbl" class="arc-label" style="bottom: 10px;">Virality Score</div>
+            </div>
+
+            <!-- Contributing factor bars -->
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                  <span>Hook Strength</span>
+                  <span id="virality-hook-pct" class="color-green">92%</span>
+                </div>
+                <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;"><div id="virality-hook-bar" style="width: 92%; height: 100%; background: var(--green);"></div></div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                  <span>Content Novelty</span>
+                  <span id="virality-novelty-pct" class="color-blue">85%</span>
+                </div>
+                <div style="height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;"><div id="virality-novelty-bar" style="width: 85%; height: 100%; background: var(--blue);"></div></div>
+              </div>
+              <div style="margin-top: 12px; font-size: 13px; color: var(--text-muted);">
+                <strong id="virality-recommendation">Strong hook — add a pattern interrupt at 10s.</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Predictions grid -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="sub-score-card" style="padding: 24px;">
+              <span style="font-size: 28px;">👁️</span>
+              <div id="virality-views" style="font-family: var(--font-serif); font-size: 28px; font-weight: 700; color: var(--blue); margin-top: 8px;">2.4M</div>
+              <div style="font-size: 12px; color: var(--text-faint); margin-top: 4px;">Expected Views</div>
+            </div>
+            <div class="sub-score-card" style="padding: 24px;">
+              <span style="font-size: 28px;">❤️</span>
+              <div id="virality-likes" style="font-family: var(--font-serif); font-size: 28px; font-weight: 700; color: var(--blue); margin-top: 8px;">180K</div>
+              <div style="font-size: 12px; color: var(--text-faint); margin-top: 4px;">Expected Likes</div>
+            </div>
+            <div class="sub-score-card" style="padding: 24px;">
+              <span style="font-size: 28px;">📤</span>
+              <div id="virality-shares" style="font-family: var(--font-serif); font-size: 28px; font-weight: 700; color: var(--blue); margin-top: 8px;">42K</div>
+              <div style="font-size: 12px; color: var(--text-faint); margin-top: 4px;">Expected Shares</div>
+            </div>
+            <div class="sub-score-card" style="padding: 24px;">
+              <span style="font-size: 28px;">🔖</span>
+              <div id="virality-saves" style="font-family: var(--font-serif); font-size: 28px; font-weight: 700; color: var(--blue); margin-top: 8px;">38K</div>
+              <div style="font-size: 12px; color: var(--text-faint); margin-top: 4px;">Expected Saves</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 12: SCORE REPORTS                    -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-reports">
+      <div class="white-card">
+        <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <h2>Score Reports & History</h2>
+            <p>Saved evaluations database and metrics log</p>
+          </div>
+          <button class="btn-action" style="background: transparent; border: 1px solid var(--border); color: var(--text-dark);">Export CSV</button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Creator Handle</th>
+                <th>Platform</th>
+                <th>Niche</th>
+                <th>Ratefluencer</th>
+                <th>Authenticity</th>
+                <th>Growth</th>
+                <th>Brand</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>@ankita.creates</strong></td>
+                <td>Instagram</td>
+                <td>Fashion</td>
+                <td class="color-green" style="font-family: var(--font-mono); font-weight: 700;">94</td>
+                <td class="color-green" style="font-family: var(--font-mono); font-weight: 700;">91</td>
+                <td style="font-family: var(--font-mono);">88</td>
+                <td style="font-family: var(--font-mono);">94</td>
+                <td><a href="#" class="tbl-btn">View</a></td>
+              </tr>
+              <tr>
+                <td><strong>@rohit.startup</strong></td>
+                <td>LinkedIn</td>
+                <td>Tech</td>
+                <td class="color-amber" style="font-family: var(--font-mono); font-weight: 700;">82</td>
+                <td class="color-green" style="font-family: var(--font-mono); font-weight: 700;">85</td>
+                <td style="font-family: var(--font-mono);">79</td>
+                <td style="font-family: var(--font-mono);">86</td>
+                <td><a href="#" class="tbl-btn">View</a></td>
+              </tr>
+              <tr>
+                <td><strong>@priya.mindful</strong></td>
+                <td>Instagram</td>
+                <td>Wellness</td>
+                <td class="color-amber" style="font-family: var(--font-mono); font-weight: 700;">71</td>
+                <td class="color-amber" style="font-family: var(--font-mono); font-weight: 700;">78</td>
+                <td class="color-red" style="font-family: var(--font-mono); font-weight: 700;">65</td>
+                <td style="font-family: var(--font-mono);">74</td>
+                <td><a href="#" class="tbl-btn">View</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 13: CONTENT LIBRARY                  -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-library">
+      <div class="white-card">
+        <div class="panel-header">
+          <h2>Content Library</h2>
+          <p>Stored AI script layouts and social media outputs</p>
+        </div>
+
+        <div class="library-grid">
+          <!-- Card 1 -->
+          <div class="library-card">
+            <div class="lib-top">
+              <span class="lib-tag">SCRIPT</span>
+              <span class="lib-date">Jun 1</span>
+            </div>
+            <div class="lib-body">
+              "Stop scrolling — AI just changed the creator game forever. What happens next..."
+            </div>
+            <div class="lib-bottom">
+              <span class="lib-score">Virality: 87</span>
+              <div class="lib-actions">
+                <button class="lib-act-btn">📋</button>
+                <button class="lib-act-btn">⚙️</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="library-card">
+            <div class="lib-top">
+              <span class="lib-tag">LINKEDIN</span>
+              <span class="lib-date">May 31</span>
+            </div>
+            <div class="lib-body">
+              "The creator economy is being rewritten by AI. Here's what smart brands..."
+            </div>
+            <div class="lib-bottom">
+              <span class="lib-score">Reads: 12K</span>
+              <div class="lib-actions">
+                <button class="lib-act-btn">📋</button>
+                <button class="lib-act-btn">⚙️</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SETTINGS PANEL                             -->
+    <!-- ========================================== -->
+    <div class="content-panel" id="panel-settings">
+      <div class="white-card">
+        <div class="panel-header">
+          <h2>Settings</h2>
+          <p>Configure API integrations and credentials</p>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 20px; max-width: 500px;">
+          <div>
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 6px;">GEMINI API KEY</label>
+            <input type="password" class="input-handle" id="setting-gemini-key" style="border-radius: 8px;" placeholder="AIza...">
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 6px;">GROQ API KEY</label>
+            <input type="password" class="input-handle" id="setting-groq-key" style="border-radius: 8px;" placeholder="gsk_...">
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 6px;">ELEVENLABS API KEY</label>
+            <input type="password" class="input-handle" id="setting-elevenlabs-key" style="border-radius: 8px;" placeholder="sk_...">
+          </div>
+          <button class="btn-action" id="btn-save-keys" style="align-self: flex-start;">Save Keys</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Current Date badge
+      const dateEl = document.getElementById('current-date');
+      if (dateEl) {
+        dateEl.textContent = new Date().toLocaleDateString('en-US', {
+          month: 'long', day: 'numeric', year: 'numeric'
+        });
+      }
+
+      // ----------------------------------------------------
+      // Page Fade-In Transition on load
+      // ----------------------------------------------------
+      const overlay = document.getElementById('transition-overlay');
+      if (overlay) {
+        // fade out the dark overlay
+        setTimeout(() => {
+          overlay.style.opacity = '0';
+        }, 100);
+      }
+
+      // Click handling on logo to trigger fade-out transition
+      const logoLink = document.getElementById('logo-nav-link');
+      if (logoLink && overlay) {
+        logoLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          overlay.classList.add('active');
+          overlay.style.opacity = '1';
+          setTimeout(() => {
+            window.location.href = logoLink.getAttribute('href');
+          }, 320);
+        });
+      }
+
+      // ----------------------------------------------------
+      // Tab Switching Logic
+      // ----------------------------------------------------
+      const menuItems = document.querySelectorAll('.menu-item');
+      const panels = document.querySelectorAll('.content-panel');
+      const headerTitle = document.getElementById('dashboard-title');
+      const headerSubtitle = document.getElementById('dashboard-subtitle');
+
+      const tabTitles = {
+        overview: { title: "Command Center", sub: "Real-time machine learning analytics and multi-agent workflow streams" },
+        scorer: { title: "Ratefluencer Score", sub: "Verify follower authenticity, engagement patterns, and master Ratefluencer Score™" },
+        ratecard: { title: "Rate Card", sub: "Estimate sponsored-post pricing from real reach and engagement" },
+        predictor: { title: "Growth Forecast", sub: "Forecasting creator follower milestones and reach curves" },
+        authenticity: { title: "Fraud Radar", sub: "Forensic audits identifying suspicious follower distributions and pods" },
+        matcher: { title: "Brand Fit", sub: "Vector search brand matching index retrieval" },
+        trends: { title: "Signal Radar", sub: "Real-time trends monitoring Reddit, LinkedIn, YouTube, and news" },
+        scripts: { title: "Pitch Scripts", sub: "Multi-agent hooks, story scripts, and call-to-actions builder" },
+        reelbuilder: { title: "Reel Lab", sub: "Auto-generate ElevenLabs overlays and video previews" },
+        linkedin: { title: "LinkedIn Angle", sub: "Craft specialized value posts in secondary domains" },
+        instagram: { title: "Instagram Angle", sub: "Engaging hook titles, paragraph spacing, and emoji layouts" },
+        virality: { title: "Virality Forecast", sub: "ML metrics calculation forecasting draft success pre-publish" },
+        reports: { title: "Score Reports", sub: "Historical query database log" },
+        library: { title: "Saved Reports", sub: "Saved score reports and analysis exports" },
+        settings: { title: "Settings Panel", sub: "Configure developer integration credentials" }
+      };
+
+      // ════════════════════════════════════════════════════════════════════
+      // SHARED COMPANY STATE — one analyzed company, synced across every page
+      // ════════════════════════════════════════════════════════════════════
+      const CreatrixCompany = {
+        KEY: 'creatrix_active_company',
+        get() {
+          try { return JSON.parse(localStorage.getItem(this.KEY) || 'null'); }
+          catch (_) { return null; }
+        },
+        set(handle, platform, data) {
+          const rec = { handle, platform: platform || 'instagram', data: data || null, ts: Date.now() };
+          localStorage.setItem(this.KEY, JSON.stringify(rec));
+          this.syncInputs(handle);
+          this.renderBanner(rec);
+          return rec;
+        },
+        syncInputs(handle) {
+          if (!handle) return;
+          ['overview-handle-input', 'scorer-handle-input', 'pred-handle'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = handle;
+          });
+        },
+        renderBanner(rec) {
+          let bar = document.getElementById('creatrix-active-company');
+          if (!bar) {
+            bar = document.createElement('div');
+            bar.id = 'creatrix-active-company';
+            bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9999;display:flex;' +
+              'align-items:center;justify-content:center;gap:14px;padding:8px 16px;font-size:13px;' +
+              'background:#0f1117;color:#e6e8ee;border-top:1px solid #2a2f3a;font-family:var(--font-mono,monospace);';
+            document.body.appendChild(bar);
+          }
+          if (!rec || !rec.handle) { bar.style.display = 'none'; return; }
+          const d = rec.data || {};
+          const real = !!d.is_real;
+          const src = (d.data_source || 'estimated').toUpperCase();
+          const color = real ? '#3DD68C' : '#F5A623';
+          const label = real ? `LIVE · ${src}` : 'ESTIMATED (add API key for live data)';
+          bar.style.display = 'flex';
+          bar.innerHTML =
+            `<span>Active company: <strong style="color:#79A8FF;">${rec.handle}</strong> · ${rec.platform}</span>` +
+            `<span style="padding:2px 10px;border-radius:100px;background:${color}22;color:${color};font-weight:600;">${label}</span>`;
+        }
+      };
+
+      // Single render path: populate Scorer, Growth, Authenticity, Matcher
+      // panels from ONE /analyze payload so every page shows the same company.
+      function applyAnalysis(handle, platform, data) {
+        if (!data) return;
+        const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+        const setStyle = (id, prop, val) => { const el = document.getElementById(id); if (el) el.style[prop] = val; };
+        const sc = data.scores || {};
+        const mt = data.metrics || {};
+        const auth = data.authenticity || {};
+        const growth = data.growth || {};
+        const niceHandle = data.handle || handle;
+
+        // ── Scorer panel ──────────────────────────────────────────────────
+        const avatarEl = document.getElementById('scorer-avatar');
+        if (avatarEl) {
+          const parts = String(niceHandle).replace('@', '').split(/[\._\-\s]/);
+          avatarEl.textContent = parts.map(p => p[0] || '').join('').toUpperCase().slice(0, 2);
+        }
+        setEl('scorer-handle-display', niceHandle);
+        setEl('scorer-platform-niche',
+          `${platform.charAt(0).toUpperCase() + platform.slice(1)} · ` +
+          `${(data.niche || 'general').charAt(0).toUpperCase() + (data.niche || 'general').slice(1)}`);
+        setEl('scorer-followers', formatNumber(mt.followers || 0));
+        setEl('scorer-avg-likes', formatNumber(mt.avg_likes || 0));
+        setEl('scorer-engagement', (mt.engagement_rate || 0) + '%');
+        const engPct = sc.engagement_score || 0, authPct = sc.authenticity_score || 0;
+        const growthPct = sc.growth_score || 0, brandPct = sc.brand_score || 0;
+        setEl('scorer-auth-pct', authPct + '%'); setStyle('scorer-auth-bar', 'width', authPct + '%');
+        setEl('scorer-eng-pct', engPct + '%'); setStyle('scorer-eng-bar', 'width', engPct + '%');
+        setEl('scorer-growth-pct', growthPct + '%'); setStyle('scorer-growth-bar', 'width', growthPct + '%');
+        setEl('scorer-brand-pct', brandPct + '%'); setStyle('scorer-brand-bar', 'width', brandPct + '%');
+        setEl('scorer-master-score', sc.ratefluencer_score || 0);
+        setEl('scorer-badge-eng', 'Engagement ' + engPct);
+        setEl('scorer-badge-auth', 'Authenticity ' + authPct);
+        setEl('scorer-badge-growth', 'Growth ' + growthPct);
+        setEl('scorer-badge-brand', 'Brand ' + brandPct);
+
+        // ── Brand matches (Scorer + Matcher panel) ────────────────────────
+        const brands = data.brand_matches || [];
+        const scorerBrandList = document.getElementById('scorer-brand-list');
+        if (scorerBrandList && brands.length) {
+          scorerBrandList.innerHTML = brands.map(b => `
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:500;margin-bottom:4px;">
+                <span>${b.name}</span><span style="font-family:var(--font-mono);">${b.match_score}%</span>
+              </div>
+              <div style="height:6px;background:var(--border);border-radius:100px;overflow:hidden;">
+                <div style="width:${b.match_score}%;height:100%;background:var(--blue);"></div>
+              </div>
+            </div>`).join('');
+        }
+        const matcherList = document.getElementById('matcher-brand-list');
+        if (matcherList && brands.length) {
+          matcherList.innerHTML = brands.map(b => `
+            <div class="white-card" style="padding:16px;margin-bottom:0;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <strong style="font-family:var(--font-serif);font-size:15px;">${b.name}</strong>
+                <span class="badge badge-success">${b.match_score}% match</span>
+              </div>
+              <p style="font-size:12px;color:var(--text-muted);">${b.reason || 'Strong audience and brand-value alignment.'}</p>
+            </div>`).join('');
+        }
+
+        // ── Growth panel ──────────────────────────────────────────────────
+        const cards = document.querySelectorAll('#panel-predictor .sub-score-val');
+        if (cards[0]) cards[0].textContent = formatNumber(growth.current || mt.followers || 0);
+        if (cards[1]) cards[1].textContent = formatNumber(growth.projected_6m || 0);
+        if (cards[2]) cards[2].textContent = '+' + (growth.monthly_rate || 0) + '%/mo';
+
+        // ── Authenticity panel ────────────────────────────────────────────
+        if (Object.keys(auth).length) {
+          const fakePct = auth.fake_follower_pct != null ? auth.fake_follower_pct : 0;
+          const genuine = auth.genuine_pct != null ? auth.genuine_pct : (100 - fakePct);
+          setEl('auth-authentic-score', Math.round(genuine));
+          setEl('auth-fake-pct', fakePct + '%');
+          setStyle('auth-fake-bar', 'width', Math.min(100, fakePct) + '%');
+          setEl('auth-verdict-line',
+            `${auth.authenticity_verdict || 'Analysis complete'} — pod risk: ${auth.engagement_pod_risk || 'low'}`);
+        }
+
+        // ── Overview panel (same company, mirrored) ───────────────────────
+        const ovAvatar = document.getElementById('overview-avatar');
+        if (ovAvatar) {
+          const parts = String(niceHandle).replace('@', '').split(/[\._\-\s]/);
+          ovAvatar.textContent = parts.map(p => p[0] || '').join('').toUpperCase().slice(0, 2);
+        }
+        setEl('overview-handle-lbl', niceHandle);
+        setEl('overview-platform-lbl',
+          `${platform.charAt(0).toUpperCase() + platform.slice(1)} · ` +
+          `${(data.niche || 'general').charAt(0).toUpperCase() + (data.niche || 'general').slice(1)}`);
+        setEl('ov-score-ratefluencer', sc.ratefluencer_score || 0);
+        setEl('ov-score-authenticity', authPct);
+        setEl('ov-score-growth', growthPct);
+        setEl('ov-score-brand', brandPct);
+
+        // ── Redraw every growth graph from the REAL projection curve ──────
+        const curve = (growth.curve && growth.curve.length > 1) ? growth.curve : null;
+        if (curve) {
+          drawGrowthCurve('ov-growth-line', 'ov-growth-dash', null, curve, 10, 10, 180, 95);
+          drawGrowthCurve('scorer-growth-line', null, 'scorer-growth-area', curve, 20, 30, 250, 150);
+          drawGrowthCurve('pred-growth-line', 'pred-growth-dash', 'pred-growth-area', curve, 40, 30, 510, 170);
+        }
+      }
+
+      // Convert a numeric projection curve into SVG path data, scaled to the
+      // chart's plot box, and redraw the line (+ optional filled area).
+      function drawGrowthCurve(lineId, dashId, areaId, curve, x0, y0, w, h) {
+        const n = curve.length;
+        if (n < 2) return;
+        const min = Math.min(...curve), max = Math.max(...curve);
+        const range = (max - min) || 1;
+        const pts = curve.map((v, i) => {
+          const x = x0 + (i / (n - 1)) * w;
+          const y = y0 + h - ((v - min) / range) * h;
+          return `${x.toFixed(1)} ${y.toFixed(1)}`;
+        });
+        const lineD = 'M ' + pts.join(' L ');
+        const lineEl = document.getElementById(lineId);
+        if (lineEl) lineEl.setAttribute('d', lineD);
+        if (areaId) {
+          const areaEl = document.getElementById(areaId);
+          if (areaEl) areaEl.setAttribute('d',
+            `${lineD} L ${(x0 + w).toFixed(1)} ${(y0 + h).toFixed(1)} L ${x0.toFixed(1)} ${(y0 + h).toFixed(1)} Z`);
+        }
+        // The full curve already shows the projection — clear the stale dotted segment.
+        if (dashId) {
+          const dashEl = document.getElementById(dashId);
+          if (dashEl) dashEl.setAttribute('d', '');
+        }
+      }
+
+      // Re-render panels from stored company when navigating (no refetch needed).
+      function hydrateActiveCompany() {
+        const rec = CreatrixCompany.get();
+        if (!rec) return;
+        CreatrixCompany.syncInputs(rec.handle);
+        CreatrixCompany.renderBanner(rec);
+        if (rec.data) applyAnalysis(rec.handle, rec.platform, rec.data);
+      }
+
+      menuItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const tabId = item.getAttribute('data-tab');
+          if (!tabId) return;
+
+          // Remove active classes
+          menuItems.forEach(el => el.classList.remove('active'));
+          panels.forEach(el => el.classList.remove('active'));
+
+          // Add active class
+          item.classList.add('active');
+          const activePanel = document.getElementById(`panel-${tabId}`);
+          if (activePanel) {
+            activePanel.classList.add('active');
+
+            // Animate arc gauges on panel entry
+            const activeArc = activePanel.querySelector('.arc-fill');
+            if (activeArc) {
+              activeArc.style.strokeDashoffset = activeArc.id === 'virality-arc-fill' ? '39' : '30';
+            }
+          }
+
+          // Update header titles
+          if (tabTitles[tabId]) {
+            headerTitle.textContent = tabTitles[tabId].title;
+            headerSubtitle.textContent = tabTitles[tabId].sub;
+          }
+
+          // Keep the analyzed company's data visible on every data page.
+          if (['scorer', 'predictor', 'authenticity', 'matcher'].includes(tabId)) {
+            hydrateActiveCompany();
+          }
+        });
+      });
+
+      // Restore the active company on page load.
+      hydrateActiveCompany();
+
+      // ----------------------------------------------------
+      // Trend Feed Switcher
+      // ----------------------------------------------------
+      const trendItems = document.querySelectorAll('.trend-row-item');
+      const trendTitle = document.getElementById('trend-det-title');
+      const trendScore = document.getElementById('trend-det-score');
+      const trendCat = document.getElementById('trend-det-cat');
+      const trendArc = document.getElementById('trend-arc-fill');
+
+      trendItems.forEach(item => {
+        item.addEventListener('click', () => {
+          trendItems.forEach(el => el.classList.remove('active'));
+          item.classList.add('active');
+
+          const title = item.querySelector('.trend-title').textContent;
+          const score = item.querySelector('.trend-row-score').textContent;
+          const cat = item.querySelector('.badge-info').textContent;
+
+          trendTitle.textContent = title;
+          trendScore.textContent = score;
+          trendCat.textContent = cat;
+
+          // Update arc offset gauge
+          const strokeOffset = 220 - (parseFloat(score) / 100) * 220;
+          if (trendArc) {
+            trendArc.style.strokeDashoffset = strokeOffset;
+          }
+        });
+      });
+
+      // ----------------------------------------------------
+      // Reel Video Preview Play Simulation
+      // ----------------------------------------------------
+      const btnPlayReel = document.getElementById('btn-play-preview-reel');
+      const progressBar = document.getElementById('reel-play-progress');
+      const scrubber = document.getElementById('timeline-scrubber');
+      const timeLbl = document.getElementById('curr-time-lbl');
+      let playInterval = null;
+      let playProgress = 0;
+
+      if (btnPlayReel) {
+        btnPlayReel.addEventListener('click', () => {
+          if (playInterval) {
+            // Pause state
+            clearInterval(playInterval);
+            playInterval = null;
+            btnPlayReel.textContent = '▶';
+          } else {
+            // Play state
+            btnPlayReel.textContent = '⏸';
+            playInterval = setInterval(() => {
+              playProgress += 2.22; // 45 seconds total length (approx 100% in 45 steps)
+              if (playProgress >= 100) {
+                playProgress = 100;
+                clearInterval(playInterval);
+                playInterval = null;
+                btnPlayReel.textContent = '▶';
+              }
+              progressBar.style.width = `${playProgress}%`;
+              scrubber.style.width = `${playProgress}%`;
+              
+              const currentSeconds = Math.floor((playProgress / 100) * 45);
+              const displaySec = currentSeconds < 10 ? `0${currentSeconds}` : currentSeconds;
+              timeLbl.textContent = `0:${displaySec}`;
+            }, 1000);
+          }
+        });
+      }
+
+      // ----------------------------------------------------
+      // SSE backend query simulation & backup Offline runner
+      // ----------------------------------------------------
+      const btnOverviewAnalyze = document.getElementById('btn-overview-analyze');
+      const overviewInput = document.getElementById('overview-handle-input');
+      const overviewTerm = document.getElementById('overview-terminal-logger');
+
+      if (btnOverviewAnalyze) {
+        btnOverviewAnalyze.addEventListener('click', async () => {
+          const handle = overviewInput.value.trim();
+          if (!handle) return;
+
+          overviewTerm.innerHTML = '';
+          btnOverviewAnalyze.textContent = 'Analyzing...';
+          btnOverviewAnalyze.disabled = true;
+
+          // Run a real influencer analysis and sync it across all pages.
+          fetch(`${window.API_BASE||'http://localhost:8080'}/api/v1/influencer/analyze`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ handle, platform: activeTrackPlatform() })
+          })
+            .then(r => r.ok ? r.json() : null)
+            .then(d => {
+              if (!d) return;
+              applyAnalysis(handle, activeTrackPlatform(), d);
+              CreatrixCompany.set(d.handle || handle, activeTrackPlatform(), d);
+              logOverviewTerm(`Synced ${d.handle || handle} across all pages · data: ${d.data_source || 'estimated'}`, 'done');
+            })
+            .catch(() => {});
+
+          try {
+            logOverviewTerm('Triggering ViraNova multi-agent workflow...', 'system');
+
+            const response = await fetch(`${window.API_BASE||'http://localhost:8080'}/api/v1/agent/run`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ input: handle, task: 'full_analysis', platform: activeTrackPlatform() })
+            });
+
+            if (!response.ok) throw new Error('API server unreachable');
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            while (true) {
+              const { value, done } = await reader.read();
+              if (done) break;
+              const chunk = decoder.decode(value);
+              const lines = chunk.split('\n');
+              for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                  try {
+                    const evt = JSON.parse(line.substring(6));
+                    const pct = evt.progress ? ` [${evt.progress}%]` : '';
+                    const status = evt.progress === 100 ? 'done' : 'info';
+                    logOverviewTerm(`${evt.message}${pct}`, status);
+                  } catch (_) {}
+                }
+              }
+            }
+          } catch (e) {
+            logOverviewTerm('FastAPI agent offline. Running local simulation...', 'system');
+            setTimeout(() => logOverviewTerm('Scanning trend signals on Reddit, LinkedIn, YouTube...', 'info'), 600);
+            setTimeout(() => logOverviewTerm('Running Ratefluencer Score™ ML calculation...', 'info'), 1300);
+            setTimeout(() => logOverviewTerm('Generating viral hook scripts with Gemini AI...', 'info'), 2000);
+            setTimeout(() => logOverviewTerm('Creatrix AI workflow complete! ✓', 'done'), 2600);
+          } finally {
+            setTimeout(() => {
+              btnOverviewAnalyze.textContent = 'Analyze';
+              btnOverviewAnalyze.disabled = false;
+            }, 2700);
+          }
+        });
+      }
+
+      function logOverviewTerm(msg, status) {
+        const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+        const div = document.createElement('div');
+        div.className = 'terminal-line';
+        let colorClass = '';
+        if (status === 'system') colorClass = 'system';
+        if (status === 'done') colorClass = 'done';
+        div.innerHTML = `<span class="term-ts">[${time}]</span><span class="term-msg ${colorClass}">${msg}</span>`;
+        overviewTerm.appendChild(div);
+        overviewTerm.scrollTop = overviewTerm.scrollHeight;
+      }
+
+      // ─── Settings: Load saved keys on open ───────────────────────────────
+      const geminiKeyInput = document.getElementById('setting-gemini-key');
+      const groqKeyInput = document.getElementById('setting-groq-key');
+      const elevenlabsKeyInput = document.getElementById('setting-elevenlabs-key');
+      const saveKeysBtn = document.getElementById('btn-save-keys');
+
+      if (geminiKeyInput && localStorage.getItem('gemini_api_key')) {
+        geminiKeyInput.value = localStorage.getItem('gemini_api_key');
+      }
+      if (groqKeyInput && localStorage.getItem('groq_api_key')) {
+        groqKeyInput.value = localStorage.getItem('groq_api_key');
+      }
+      if (elevenlabsKeyInput && localStorage.getItem('elevenlabs_api_key')) {
+        elevenlabsKeyInput.value = localStorage.getItem('elevenlabs_api_key');
+      }
+
+      if (saveKeysBtn) {
+        saveKeysBtn.addEventListener('click', () => {
+          if (geminiKeyInput && geminiKeyInput.value.trim()) {
+            localStorage.setItem('gemini_api_key', geminiKeyInput.value.trim());
+          }
+          if (groqKeyInput && groqKeyInput.value.trim()) {
+            localStorage.setItem('groq_api_key', groqKeyInput.value.trim());
+          }
+          if (elevenlabsKeyInput && elevenlabsKeyInput.value.trim()) {
+            localStorage.setItem('elevenlabs_api_key', elevenlabsKeyInput.value.trim());
+          }
+          saveKeysBtn.textContent = 'Saved ✓';
+          setTimeout(() => { saveKeysBtn.textContent = 'Save Keys'; }, 2000);
+        });
+      }
+
+      // ─── Loading state helper ─────────────────────────────────────────────
+      // Current analysis platform. YouTube is the free real-data source, so it
+      // is the default — Instagram requires the paid RapidAPI key on the backend.
+      let currentPlatform = 'youtube';
+      function activeTrackPlatform() {
+        const pill = document.querySelector('#panel-scorer .platform-pill.active');
+        if (pill && pill.dataset.platform) return pill.dataset.platform;
+        return currentPlatform;
+      }
+
+      // --- TRACK TOGGLE --- now actually drives the platform: each button
+      // switches to its starting page and runs that track's primary action.
+      // Bound via addEventListener (not inline onclick) because this whole
+      // script lives inside a DOMContentLoaded callback, so setActiveTrack is
+      // not global — inline onclick would fail to resolve it. Also kept on
+      // window as a convenience for any external caller.
+      window.setActiveTrack = setActiveTrack;
+      ['intel', 'creator', 'full'].forEach(track => {
+        const tb = document.getElementById({ intel: 'toggle-intel', creator: 'toggle-creator', full: 'toggle-full' }[track]);
+        if (tb) tb.addEventListener('click', () => setActiveTrack(track));
+      });
+      function setActiveTrack(track) {
+        const btns = { intel: 'toggle-intel', creator: 'toggle-creator', full: 'toggle-full' };
+        const classes = { intel: 't-active-intel', creator: 't-active-creator', full: 't-active-full' };
+        Object.values(btns).forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.remove('t-active-intel', 't-active-creator', 't-active-full');
+        });
+        const active = document.getElementById(btns[track]);
+        if (active) active.classList.add(classes[track]);
+
+        const subtitles = {
+          intel: 'Influencer intelligence, scoring and brand matching',
+          creator: 'Viral content creation, trends and script generation',
+          full: 'Complete AI-powered creator economy platform'
+        };
+        const sub = document.getElementById('dashboard-subtitle');
+        if (sub) sub.textContent = subtitles[track];
+
+        // Navigate to the track's home tab and trigger its primary action.
+        const go = (tab) => {
+          const item = document.querySelector(`.menu-item[data-tab="${tab}"]`);
+          if (item) item.click();
+        };
+        const clickIfPresent = (id) => { const b = document.getElementById(id); if (b) b.click(); };
+
+        if (track === 'intel') {
+          go('scorer');
+          clickIfPresent('btn-scorer-analyze');      // run real influencer analysis
+        } else if (track === 'creator') {
+          go('trends');
+          clickIfPresent('btn-refresh-trends');       // pull live trends
+        } else if (track === 'full') {
+          go('overview');
+          clickIfPresent('btn-overview-analyze');     // full multi-agent + analysis
+        }
+      }
+
+      function setLoading(btn, isLoading) {
+        if (!btn) return;
+        btn.disabled = isLoading;
+        btn.textContent = isLoading ? 'Processing...' : (btn.dataset.originalText || btn.textContent);
+      }
+
+      function formatNumber(n) {
+        if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+        if (n >= 1000) return (n / 1000).toFixed(0) + 'K';
+        return String(n);
+      }
+
+      // Topic used when a generator's input is left empty — derives from the
+      // currently analyzed company so content stays on-theme.
+      function defaultTopic() {
+        const rec = (typeof CreatrixCompany !== 'undefined') ? CreatrixCompany.get() : null;
+        if (rec && rec.handle) {
+          const niche = (rec.data && rec.data.niche) ? rec.data.niche : 'creator';
+          return `${rec.handle} — ${niche} content for creators`;
+        }
+        return 'AI tools for content creators';
+      }
+
+      // ─── Platform pill selector helper ────────────────────────────────────
+      function activatePill(container, clickedPill) {
+        container.querySelectorAll('.platform-pill').forEach(p => p.classList.remove('active'));
+        clickedPill.classList.add('active');
+      }
+
+      function activateStylePill(container, clickedPill) {
+        container.querySelectorAll('.style-pill-card').forEach(p => p.classList.remove('active'));
+        clickedPill.classList.add('active');
+      }
+
+      // ─── Script Generator ─────────────────────────────────────────────────
+      const btnGenerateScript = document.getElementById('btn-generate-script');
+      const scriptDurationSel = document.getElementById('script-duration-selector');
+      const scriptStyleSel = document.getElementById('script-style-selector');
+
+      if (scriptDurationSel) {
+        scriptDurationSel.querySelectorAll('.platform-pill').forEach(pill => {
+          pill.addEventListener('click', () => activatePill(scriptDurationSel, pill));
+        });
+      }
+      if (scriptStyleSel) {
+        scriptStyleSel.querySelectorAll('.style-pill-card').forEach(pill => {
+          pill.addEventListener('click', () => activateStylePill(scriptStyleSel, pill));
+        });
+      }
+
+      if (btnGenerateScript) {
+        btnGenerateScript.addEventListener('click', async () => {
+          const topicEl = document.getElementById('script-topic-input');
+          const topicValue = topicEl ? topicEl.value.trim() : 'AI tools for creators';
+          if (!topicValue) return;
+
+          const activeDuration = scriptDurationSel
+            ? (scriptDurationSel.querySelector('.platform-pill.active') || {}).dataset?.duration || '30'
+            : '30';
+          const activeStyle = scriptStyleSel
+            ? (scriptStyleSel.querySelector('.style-pill-card.active') || {}).dataset?.style || 'hooks'
+            : 'hooks';
+
+          setLoading(btnGenerateScript, true);
+          try {
+            const response = await fetch(`${window.API_BASE||'http://localhost:8080'}/api/v1/content/generate-script`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ topic: topicValue, duration: parseInt(activeDuration), style: activeStyle })
+            });
+            if (!response.ok) throw new Error('API error');
+            const data = await response.json();
+            const safe = (v) => v || '';
+            const hookEl = document.getElementById('script-out-hook');
+            const storyEl = document.getElementById('script-out-story');
+            const insightEl = document.getElementById('script-out-insight');
+            const ctaEl = document.getElementById('script-out-cta');
+            if (hookEl) hookEl.textContent = safe(data.hook);
+            if (storyEl) storyEl.textContent = safe(data.story);
+            if (insightEl) insightEl.textContent = safe(data.insight);
+            if (ctaEl) ctaEl.textContent = safe(data.cta);
+          } catch (e) {
+            const hookEl = document.getElementById('script-out-hook');
+            if (hookEl) hookEl.textContent = 'API offline — configure backend to get AI-generated scripts.';
+          } finally {
+            setLoading(btnGenerateScript, false);
+          }
+        });
+      }
+
+      // ─── Influencer Scorer ────────────────────────────────────────────────
+      const btnScorerAnalyze = document.getElementById('btn-scorer-analyze');
+      const scorerPlatformSel = document.getElementById('scorer-platform-selector');
+
+      if (scorerPlatformSel) {
+        scorerPlatformSel.querySelectorAll('.platform-pill').forEach(pill => {
+          pill.addEventListener('click', () => activatePill(scorerPlatformSel, pill));
+        });
+      }
+
+      if (btnScorerAnalyze) {
+        btnScorerAnalyze.addEventListener('click', async () => {
+          const handleInput = document.getElementById('scorer-handle-input');
+          const handleValue = handleInput ? handleInput.value.trim() : '';
+          if (!handleValue) return;
+
+          const activePlatformPill = scorerPlatformSel
+            ? scorerPlatformSel.querySelector('.platform-pill.active')
+            : null;
+          const platformValue = activePlatformPill
+            ? (activePlatformPill.dataset.platform || 'instagram')
+            : 'instagram';
+
+          setLoading(btnScorerAnalyze, true);
+          try {
+            const response = await fetch(`${window.API_BASE||'http://localhost:8080'}/api/v1/influencer/analyze`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ handle: handleValue, platform: platformValue })
+            });
+            if (!response.ok) throw new Error('API error');
+            const data = await response.json();
+
+            // Render every panel + persist as the active company (cross-page sync).
+            applyAnalysis(handleValue, platformValue, data);
+            CreatrixCompany.set(data.handle || handleValue, platformValue, data);
+          } catch (e) {
+            const masterEl = document.getElementById('scorer-master-score');
+            if (masterEl) masterEl.textContent = 'ERR';
+          } finally {
+            setLoading(btnScorerAnalyze, false);
+          }
+        });
+      }
+
+      // ─── Virality Predictor ───────────────────────────────────────────────
+      const btnPredictVirality = document.getElementById('btn-predict-virality');
+      const viralityPlatformSel = document.querySelector('#panel-virality .platform-selector');
+
+      if (viralityPlatformSel) {
+        viralityPlatformSel.querySelectorAll('.platform-pill').forEach(pill => {
+          pill.addEventListener('click', () => activatePill(viralityPlatformSel, pill));
+        });
+      }
+
+      if (btnPredictVirality) {
+        btnPredictVirality.addEventListener('click', async () => {
+          const scriptInput = document.getElementById('virality-script-input');
+          const scriptText = scriptInput ? scriptInput.value.trim() : '';
+          if (!scriptText) return;
+
+          const activePill = viralityPlatformSel
+            ? viralityPlatformSel.querySelector('.platform-pill.active')
+            : null;
+          const platform = activePill ? (activePill.dataset.platform || 'instagram') : 'instagram';
+
+          setLoading(btnPredictVirality, true);
+          try {
+            const response = await fetch(`${window.API_BASE||'http://localhost:8080'}/api/v1/virality/predict`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ script_text: scriptText, platform: platform })
+            });
+            if (!response.ok) throw new Error('API error');
+            const data = await response.json();
+
+            const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            const setStyle = (id, prop, val) => { const el = document.getElementById(id); if (el) el.style[prop] = val; };
+
+            const score = data.virality_score || 0;
+            const hookStr = data.hook_strength || 0;
+            const novelty = data.content_novelty || 0;
+
+            setEl('virality-score-val', score);
+            setEl('virality-grade-lbl', 'Grade: ' + (data.grade || 'B'));
+            setEl('virality-hook-pct', hookStr + '%');
+            setStyle('virality-hook-bar', 'width', hookStr + '%');
+            setEl('virality-novelty-pct', novelty + '%');
+            setStyle('virality-novelty-bar', 'width', novelty + '%');
+            setEl('virality-recommendation', data.recommendation || '');
+            setEl('virality-views', formatNumber(data.expected_views || 0));
+            setEl('virality-likes', formatNumber(data.expected_likes || 0));
+            setEl('virality-shares', formatNumber(data.expected_shares || 0));
+            setEl('virality-saves', formatNumber(data.expected_saves || 0));
+
+            // Update arc gauge (dashoffset 300 = 0%, 0 = 100%)
+            const arcFill = document.getElementById('virality-arc-fill');
+            if (arcFill) {
+              arcFill.style.strokeDashoffset = String(300 - (score / 100) * 300);
+            }
+          } catch (e) {
+            document.getElementById('virality-score-val').textContent = 'ERR';
+          } finally {
+            setLoading(btnPredictVirality, false);
+          }
+        });
+      }
+
+      // ─── Trend Discovery ──────────────────────────────────────────────────
+      const btnRefreshTrends = document.getElementById('btn-refresh-trends');
+      const trendFeedItems = document.getElementById('trend-feed-items');
+
+      if (btnRefreshTrends) {
+        btnRefreshTrends.addEventListener('click', async () => {
+          setLoading(btnRefreshTrends, true);
+          try {
+            const response = await fetch(`${window.API_BASE||'http://localhost:8080'}/api/v1/trends/discover`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ category: 'all', limit: 10 })
+            });
+            if (!response.ok) throw new Error('API error');
+            const data = await response.json();
+            const trendsArr = data.trends || [];
+
+            if (trendFeedItems && trendsArr.length > 0) {
+              trendFeedItems.innerHTML = trendsArr.map((t, i) => `
+                <div class="trend-row-item${i === 0 ? ' active' : ''}" data-trend-index="${i}">
+                  <div class="trend-main-info">
+                    <div class="trend-header-pill">
+                      <span class="trend-rank">#${i+1}</span>
+                      <span class="trend-title">${t.title}</span>
+                      <span class="badge badge-info" style="font-size:10px;padding:2px 6px;">${t.category}</span>
+                    </div>
+                    <div class="trend-sources-pills">
+                      ${(t.sources||[]).map(s => `<span class="source-mini-tag">${s}</span>`).join('')}
+                    </div>
+                  </div>
+                  <div class="trend-meta-stats">
+                    <span class="trend-row-score">${t.score}</span>
+                    <span class="trend-growth-percent">↑ ${t.growth_velocity}</span>
+                  </div>
+                </div>`).join('');
+
+              // Re-attach click handlers for trend rows
+              trendFeedItems.querySelectorAll('.trend-row-item').forEach(item => {
+                item.addEventListener('click', () => {
+                  trendFeedItems.querySelectorAll('.trend-row-item').forEach(el => el.classList.remove('active'));
+                  item.classList.add('active');
+                  const titleEl = item.querySelector('.trend-title');
+                  const scoreEl = item.querySelector('.trend-row-score');
+                  const catEl = item.querySelector('.badge-info');
+                  if (trendTitle && titleEl) trendTitle.textContent = titleEl.textContent;
+                  if (trendScore && scoreEl) trendScore.textContent = scoreEl.textContent;
+                  if (trendCat && catEl) trendCat.textContent = catEl.textContent;
+                  const strokeOffset = 220 - (parseFloat(scoreEl?.textContent || 0) / 100) * 220;
+                  if (trendArc) trendArc.style.strokeDashoffset = strokeOffset;
+                });
+              });
+
+              // Update detail pane with first trend
+              if (trendsArr[0]) {
+                if (trendTitle) trendTitle.textContent = trendsArr[0].title;
+                if (trendScore) trendScore.textContent = String(trendsArr[0].score);
+                if (trendCat) trendCat.textContent = trendsArr[0].category;
+              }
+            }
+          } catch (e) {
+            // silently fail - trends panel keeps static data
+          } finally {
+            setLoading(btnRefreshTrends, false);
+          }
+        });
+      }
+
+      // ─── LinkedIn Post Generator ──────────────────────────────────────────
+      const btnGenerateLinkedIn = document.getElementById('btn-generate-linkedin');
+
+      if (btnGenerateLinkedIn) {
+        btnGenerateLinkedIn.addEventListener('click', async () => {
+          const topicEl = document.getElementById('linkedin-topic-input');
+          const topicValue = (topicEl && topicEl.value.trim()) || defaultTopic();
+          if (topicEl && !topicEl.value.trim()) topicEl.value = topicValue;
+
+          setLoading(btnGenerateLinkedIn, true);
+          try {
+            const response = await fetch(`${window.API_BASE||'http://localhost:8080'}/api/v1/content/linkedin`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ topic: topicValue, audience: 'professionals' })
+            });
+            if (!response.ok) throw new Error('API error');
+            const data = await response.json();
+
+            const textEl = document.getElementById('linkedin-out-text');
+            const hashEl = document.getElementById('linkedin-out-hashtags');
+            if (textEl && data.post_text) {
+              textEl.innerHTML = data.post_text.replace(/\n/g, '<br>');
+            }
+            if (hashEl && data.hashtags) {
+              hashEl.textContent = data.hashtags.join(' ');
+            }
+          } catch (e) {
+            const textEl = document.getElementById('linkedin-out-text');
+            if (textEl) textEl.textContent = 'API offline — configure backend for AI-generated posts.';
+          } finally {
+            setLoading(btnGenerateLinkedIn, false);
+          }
+        });
+      }
+
+      // ─── Instagram Caption Generator ─────────────────────────────────────
+      const btnGenerateInstagram = document.getElementById('btn-generate-instagram');
+
+      if (btnGenerateInstagram) {
+        btnGenerateInstagram.addEventListener('click', async () => {
+          const topicEl = document.getElementById('instagram-topic-input');
+          const topicValue = (topicEl && topicEl.value.trim()) || defaultTopic();
+          if (topicEl && !topicEl.value.trim()) topicEl.value = topicValue;
+
+          const apiBase = window.API_BASE || 'http://localhost:8080';
+          const imgEl = document.getElementById('instagram-image-preview');
+          setLoading(btnGenerateInstagram, true);
+
+          // Kick off the AI image generation in parallel with the caption.
+          if (imgEl) {
+            imgEl.style.backgroundImage = '';
+            imgEl.textContent = 'Generating image…';
+          }
+          const imagePromise = fetch(`${apiBase}/api/v1/content/instagram-image`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ topic: topicValue })
+          }).then(r => r.ok ? r.json() : null).then(d => {
+            if (imgEl && d && d.image_base64) {
+              imgEl.textContent = '';
+              imgEl.style.backgroundImage = `url(data:image/png;base64,${d.image_base64})`;
+            } else if (imgEl) {
+              imgEl.textContent = 'Image unavailable';
+            }
+          }).catch(() => { if (imgEl) imgEl.textContent = 'Image unavailable'; });
+
+          try {
+            const response = await fetch(`${apiBase}/api/v1/content/instagram`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ topic: topicValue, style: 'engaging' })
+            });
+            if (!response.ok) throw new Error('API error');
+            const data = await response.json();
+
+            const capEl = document.getElementById('instagram-out-caption');
+            if (capEl && data.caption) {
+              const tags = (data.hashtags || []).join(' ');
+              capEl.innerHTML = data.caption.replace(/\n/g, '<br>') + (tags ? `<br><br><span style="color:#0A66C2;">${tags}</span>` : '');
+            }
+          } catch (e) {
+            const capEl = document.getElementById('instagram-out-caption');
+            if (capEl) capEl.textContent = 'API offline — configure backend for AI captions.';
+          } finally {
+            await imagePromise;   // keep the button busy until the image resolves too
+            setLoading(btnGenerateInstagram, false);
+          }
+        });
+      }
+
+      // ─── Overview: speak the analysis aloud (ElevenLabs, on click only) ───
+      const btnOverviewSpeak = document.getElementById('btn-overview-speak');
+      let overviewAudio = null;
+      if (btnOverviewSpeak) {
+        btnOverviewSpeak.addEventListener('click', async () => {
+          // Toggle off if it's already speaking.
+          if (overviewAudio && !overviewAudio.paused) {
+            overviewAudio.pause();
+            btnOverviewSpeak.textContent = '🔊 Speak';
+            return;
+          }
+          const rec = (typeof CreatrixCompany !== 'undefined') ? CreatrixCompany.get() : null;
+          const d = (rec && rec.data) ? rec.data : null;
+          if (!d) {
+            btnOverviewSpeak.textContent = 'Analyze first';
+            setTimeout(() => { btnOverviewSpeak.textContent = '🔊 Speak'; }, 1500);
+            return;
+          }
+          // Build a spoken summary from the REAL analysis data.
+          const s = d.scores || {}, m = d.metrics || {};
+          const handle = d.handle || (rec && rec.handle) || 'this creator';
+          let text = `Analysis for ${handle}. `;
+          if (m.followers) text += `${formatNumber(m.followers)} followers. `;
+          if (s.ratefluencer_score != null) text += `Ratefluencer score ${s.ratefluencer_score} out of 100. `;
+          if (s.authenticity_score != null) text += `Authenticity ${s.authenticity_score}. `;
+          if (s.growth_score != null) text += `Growth potential ${s.growth_score}. `;
+          if (s.brand_score != null) text += `Brand match ${s.brand_score}. `;
+          if (d.summary) text += d.summary;
+
+          btnOverviewSpeak.textContent = 'Generating…';
+          btnOverviewSpeak.disabled = true;
+          try {
+            const r = await fetch(`${window.API_BASE||'http://localhost:8080'}/api/v1/virality/voiceover`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ script_text: text.slice(0, 500) })
+            });
+            const data = r.ok ? await r.json() : null;
+            if (data && data.audio_base64) {
+              const bytes = Uint8Array.from(atob(data.audio_base64), c => c.charCodeAt(0));
+              const url = URL.createObjectURL(new Blob([bytes], { type: 'audio/mpeg' }));
+              if (overviewAudio) overviewAudio.pause();
+              overviewAudio = new Audio(url);
+              btnOverviewSpeak.textContent = '⏸ Stop';
+              overviewAudio.onended = () => { btnOverviewSpeak.textContent = '🔊 Speak'; };
+              overviewAudio.play().catch(() => { btnOverviewSpeak.textContent = '🔊 Speak'; });
+            } else {
+              btnOverviewSpeak.textContent = 'Voice unavailable';
+              setTimeout(() => { btnOverviewSpeak.textContent = '🔊 Speak'; }, 1500);
+            }
+          } catch (e) {
+            btnOverviewSpeak.textContent = 'Voice unavailable';
+            setTimeout(() => { btnOverviewSpeak.textContent = '🔊 Speak'; }, 1500);
+          } finally {
+            btnOverviewSpeak.disabled = false;
+          }
+        });
+      }
+
+      // ─── Trend → Script shortcut ──────────────────────────────────────────
+      const btnTrendGenScript = document.getElementById('btn-trend-gen-script');
+      if (btnTrendGenScript) {
+        btnTrendGenScript.addEventListener('click', () => {
+          const trendTitleText = document.getElementById('trend-det-title');
+          const topicInput = document.getElementById('script-topic-input');
+          if (topicInput && trendTitleText) {
+            topicInput.value = trendTitleText.textContent;
+          }
+          const scriptsMenuItem = document.querySelector('.menu-item[data-tab="scripts"]');
+          if (scriptsMenuItem) scriptsMenuItem.click();
+        });
+      }
+
+      // ─── Growth Prediction ────────────────────────────────────────────────
+      const btnPredictGrowth = document.getElementById('btn-predict-growth');
+      if (btnPredictGrowth) {
+        btnPredictGrowth.addEventListener('click', async () => {
+          const handleEl = document.getElementById('pred-handle');
+          const handle = handleEl ? handleEl.value.trim() : 'MrBeast';
+          const activePill = document.querySelector('#panel-predictor .platform-pill.active');
+          const horizonText = activePill ? activePill.textContent.trim() : '6 Months';
+          const months = horizonText.includes('12') ? 12 : horizonText.includes('3') ? 3 : 6;
+
+          btnPredictGrowth.disabled = true;
+          btnPredictGrowth.textContent = 'Predicting...';
+          try {
+            const res = await fetch(`${window.API_BASE||'http://localhost:8080'}/api/v1/influencer/growth`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ handle, platform: activeTrackPlatform(), months })
+            });
+            if (!res.ok) throw new Error('API error');
+            const d = await res.json();
+            const g = d.growth || {};
+            const cards = document.querySelectorAll('#panel-predictor .sub-score-val');
+            if (cards[0]) cards[0].textContent = formatNumber(g.current || 0);
+            if (cards[1]) {
+              const pred = months === 3 ? g.projected_3m : months === 12 ? g.projected_12m : g.projected_6m;
+              cards[1].textContent = formatNumber(pred || 0);
+            }
+            if (cards[2]) cards[2].textContent = '+' + (g.monthly_rate || 0) + '%/mo';
+          } catch (_) {}
+          finally {
+            btnPredictGrowth.disabled = false;
+            btnPredictGrowth.textContent = 'Predict Growth';
+          }
+        });
+      }
+
+      // ─── Build Reel / ElevenLabs Voiceover ───────────────────────────────
+      const btnBuildReel = document.getElementById('btn-build-reel');
+      if (btnBuildReel) {
+        btnBuildReel.addEventListener('click', async () => {
+          const hookEl = document.getElementById('script-out-hook');
+          const scriptText = hookEl ? hookEl.textContent.trim() : '';
+          const voiceCards = document.querySelectorAll('.voice-option-card');
+          let voiceId = 'EXAVITQu4vr4xnSDxMaL';
+          const voiceMap = {
+            'Nova': 'EXAVITQu4vr4xnSDxMaL',
+            'Echo': 'TxGEqnHWrfWFTfGW9XjX',
+          };
+          voiceCards.forEach(card => {
+            if (card.classList.contains('active')) {
+              const name = card.querySelector('.voice-opt-name')?.textContent?.trim() || '';
+              voiceId = voiceMap[name] || voiceId;
+            }
+          });
+
+          const captionEl = document.getElementById('phone-text-caption');
+          if (captionEl && scriptText) captionEl.textContent = scriptText.slice(0, 80) + '...';
+
+          btnBuildReel.disabled = true;
+          btnBuildReel.textContent = 'Generating...';
+
+          const textToSpeak = scriptText || 'AI just changed the creator economy forever. Here is what nobody is telling you about influence in 2026.';
+
+          try {
+            const res = await fetch(`${window.API_BASE||'http://localhost:8080'}/api/v1/virality/voiceover`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ script_text: textToSpeak, voice_id: voiceId })
+            });
+            if (!res.ok) throw new Error('API error');
+            const d = await res.json();
+            if (d.audio_base64) {
+              const binary = atob(d.audio_base64);
+              const bytes = new Uint8Array(binary.length);
+              for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+              const blob = new Blob([bytes], { type: 'audio/mpeg' });
+              const url = URL.createObjectURL(blob);
+              const btnPlay = document.getElementById('btn-play-preview-reel');
+              if (btnPlay) {
+                const audio = new Audio(url);
+                btnPlay.onclick = () => {
+                  if (audio.paused) { audio.play(); btnPlay.textContent = '⏸'; }
+                  else { audio.pause(); btnPlay.textContent = '▶'; }
+                  audio.onended = () => { btnPlay.textContent = '▶'; };
+                };
+              }
+            }
+            const badge = document.querySelector('.phone-score-badge');
+            try {
+              const viralRes = await fetch(`${window.API_BASE||'http://localhost:8080'}/api/v1/virality/predict`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ script_text: textToSpeak, platform: 'instagram' })
+              });
+              if (viralRes.ok) {
+                const vd = await viralRes.json();
+                if (badge) badge.textContent = `${vd.virality_score || 87} 🔥`;
+              }
+            } catch (_) {}
+          } catch (_) {
+            const badge = document.querySelector('.phone-score-badge');
+            if (badge) badge.textContent = '87 🔥';
+          } finally {
+            btnBuildReel.disabled = false;
+            btnBuildReel.textContent = 'Generate Reel →';
+          }
+        });
+      }
+
+      // ─── Auto-load trends on page ready ──────────────────────────────────
+      (async () => {
+        try {
+          const res = await fetch(`${window.API_BASE||'http://localhost:8080'}/api/v1/trends/discover`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ category: 'all', limit: 10 })
+          });
+          if (res.ok) {
+            const d = await res.json();
+            const trendFeed = document.getElementById('trend-feed-items');
+            const trendsArr = d.trends || [];
+            if (trendFeed && trendsArr.length > 0) {
+              trendFeed.innerHTML = trendsArr.map((t, i) => `
+                <div class="trend-row-item${i === 0 ? ' active' : ''}" data-trend-index="${i}">
+                  <div class="trend-main-info">
+                    <div class="trend-header-pill">
+                      <span class="trend-rank">#${i+1}</span>
+                      <span class="trend-title">${t.title}</span>
+                      <span class="badge badge-info" style="font-size:10px;padding:2px 6px;">${t.category}</span>
+                    </div>
+                    <div class="trend-sources-pills">
+                      ${(t.sources||[]).map(s => `<span class="source-mini-tag">${s}</span>`).join('')}
+                    </div>
+                  </div>
+                  <div class="trend-meta-stats">
+                    <span class="trend-row-score">${t.score}</span>
+                    <span class="trend-growth-percent">↑ +${t.growth_pct}%</span>
+                  </div>
+                </div>`).join('');
+            }
+          }
+        } catch (_) {}
+      })();
+
+    });
+  </script>
+  <script>
+  /* Creatrix IQ (Track 1) — IQ Tools: Compare Creators + Campaign Predictor. */
+  (function () {
+    function api() { return (window.API_BASE || 'http://localhost:8080'); }
+    function fmt(n) {
+      n = Number(n) || 0;
+      if (n >= 1e9) return (n / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
+      if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+      if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
+      return String(Math.round(n));
+    }
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+    function liveBadge(isReal) {
+      return isReal
+        ? '<span class="badge badge-success" style="margin-left:8px;">LIVE</span>'
+        : '<span class="badge badge-warning" style="margin-left:8px;">ESTIMATED</span>';
+    }
+    function analyze(handle) {
+      return fetch(api() + '/api/v1/influencer/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ handle: handle, platform: 'youtube' })
+      }).then(function (r) { return r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)); });
+    }
+
+    // ── Compare Creators ─────────────────────────────────────────────────
+    function initCompare() {
+      var btn = document.getElementById('btn-compare');
+      var out = document.getElementById('cmp-results');
+      if (!btn || !out) return;
+      btn.addEventListener('click', function () {
+        var a = (document.getElementById('cmp-handle-a').value || '').trim();
+        var b = (document.getElementById('cmp-handle-b').value || '').trim();
+        if (!a || !b) { out.innerHTML = '<p style="color:var(--red);">Enter two creator handles to compare.</p>'; return; }
+        out.innerHTML = '<p style="color:var(--text-muted);">Analyzing both creators…</p>';
+        btn.disabled = true;
+        Promise.all([analyze(a), analyze(b)]).then(function (res) {
+          renderCompare(out, res[0], res[1]);
+        }).catch(function (err) {
+          out.innerHTML = '<p style="color:var(--red);">Could not compare creators: ' + (err && err.message ? err.message : 'request failed') + '.</p>';
+        }).then(function () { btn.disabled = false; });
+      });
+    }
+    function renderCompare(out, da, db) {
+      da = da || {}; db = db || {};
+      var sa = da.scores || {}, sb = db.scores || {};
+      var ma = da.metrics || {}, mb = db.metrics || {};
+      var nameA = da.handle || 'Creator A', nameB = db.handle || 'Creator B';
+      var rows = [
+        { label: 'Followers', a: Number(ma.followers) || 0, b: Number(mb.followers) || 0, fmt: fmt },
+        { label: 'Ratefluencer Score', a: Number(sa.ratefluencer_score) || 0, b: Number(sb.ratefluencer_score) || 0 },
+        { label: 'Authenticity Score', a: Number(sa.authenticity_score) || 0, b: Number(sb.authenticity_score) || 0 },
+        { label: 'Growth Score', a: Number(sa.growth_score) || 0, b: Number(sb.growth_score) || 0 },
+        { label: 'Brand Score', a: Number(sa.brand_score) || 0, b: Number(sb.brand_score) || 0 }
+      ];
+      function cell(val, win, fmtFn) {
+        var txt = fmtFn ? fmtFn(val) : String(val);
+        return '<td style="text-align:center;' + (win ? 'font-weight:700;color:var(--blue);' : '') + '">' + txt + '</td>';
+      }
+      var body = rows.map(function (r) {
+        var aWin = r.a > r.b, bWin = r.b > r.a;
+        return '<tr><td style="font-weight:600;">' + r.label + '</td>' +
+          cell(r.a, aWin, r.fmt) + cell(r.b, bWin, r.fmt) + '</tr>';
+      }).join('');
+      out.innerHTML =
+        '<div class="table-container"><table>' +
+          '<thead><tr><th>Metric</th>' +
+            '<th style="text-align:center;">' + nameA + liveBadge(!!da.is_real) + '</th>' +
+            '<th style="text-align:center;">' + nameB + liveBadge(!!db.is_real) + '</th>' +
+          '</tr></thead><tbody>' + body + '</tbody></table></div>';
+    }
+
+    // ── Campaign Predictor ───────────────────────────────────────────────
+    function initCampaign() {
+      var btn = document.getElementById('btn-campaign');
+      var out = document.getElementById('camp-results');
+      var sel = document.getElementById('camp-category-selector');
+      if (!btn || !out) return;
+      if (sel) {
+        sel.addEventListener('click', function (e) {
+          var pill = e.target.closest('.platform-pill');
+          if (!pill) return;
+          sel.querySelectorAll('.platform-pill').forEach(function (p) { p.classList.remove('active'); });
+          pill.classList.add('active');
+        });
+      }
+      btn.addEventListener('click', function () {
+        var handle = (document.getElementById('camp-handle').value || '').trim();
+        if (!handle) { out.innerHTML = '<p style="color:var(--red);">Enter a creator to predict campaign success.</p>'; return; }
+        var activePill = sel ? sel.querySelector('.platform-pill.active') : null;
+        var category = activePill ? (activePill.getAttribute('data-category') || 'Tech') : 'Tech';
+        out.innerHTML = '<p style="color:var(--text-muted);">Predicting campaign success…</p>';
+        btn.disabled = true;
+        analyze(handle).then(function (d) {
+          renderCampaign(out, d, category);
+        }).catch(function (err) {
+          out.innerHTML = '<p style="color:var(--red);">Could not predict campaign: ' + (err && err.message ? err.message : 'request failed') + '.</p>';
+        }).then(function () { btn.disabled = false; });
+      });
+    }
+    function renderCampaign(out, d, category) {
+      d = d || {};
+      var s = d.scores || {}, m = d.metrics || {};
+      var rate = Number(s.ratefluencer_score) || 0;
+      var auth = Number(s.authenticity_score) || 0;
+      var eng = (s.engagement_score != null) ? Number(s.engagement_score) : 50;
+      var followers = Number(m.followers) || 0;
+      var engRate = Number(m.engagement_rate) || 0;
+      var prob = clamp(Math.round(0.5 * rate + 0.3 * auth + 0.2 * eng), 1, 99);
+      var engaged = Math.round(followers * engRate / 100);
+      var rec, recColor;
+      if (prob >= 75) { rec = 'Strong fit — greenlight'; recColor = 'var(--green)'; }
+      else if (prob >= 55) { rec = 'Good fit — negotiate rate'; recColor = 'var(--blue)'; }
+      else { rec = 'Higher risk — pilot first'; recColor = 'var(--amber)'; }
+      out.innerHTML =
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">' +
+          '<span style="font-weight:600;">' + (d.handle || 'Creator') + '</span>' +
+          '<span class="badge badge-info">' + category + '</span>' + liveBadge(!!d.is_real) +
+        '</div>' +
+        '<div style="text-align:center;margin-bottom:24px;">' +
+          '<div style="font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:1px;">Campaign Success Probability</div>' +
+          '<div style="font-size:64px;font-weight:800;color:' + recColor + ';line-height:1.1;">' + prob + '%</div>' +
+          '<div style="font-size:14px;font-weight:600;color:' + recColor + ';">' + rec + '</div>' +
+        '</div>' +
+        '<div class="score-cards-grid" style="grid-template-columns:repeat(2,1fr);">' +
+          '<div class="sub-score-card"><div class="sub-score-label">Estimated Reach</div><div class="sub-score-val color-blue">' + fmt(followers) + '</div></div>' +
+          '<div class="sub-score-card"><div class="sub-score-label">Engaged Audience</div><div class="sub-score-val color-purple">' + fmt(engaged) + '</div></div>' +
+        '</div>';
+    }
+
+    window.addEventListener('load', function () { initCompare(); initCampaign(); });
+  })();
+  </script>
+  <script>
+  /* Creatrix IQ (Track 1) — show only Influencer-Intelligence tabs + rebrand. */
+  (function () {
+    var SHOW = ['compare','campaign','overview','scorer','predictor','authenticity','matcher','reports','library','settings'];
+    var DEFAULT_TAB = 'compare';
+    var BRAND = 'Creatrix IQ';
+    function apply() {
+      document.querySelectorAll('.menu-item[data-tab]').forEach(function (li) {
+        if (SHOW.indexOf(li.getAttribute('data-tab')) === -1) li.style.display = 'none';
+      });
+      var toggle = document.querySelector('.track-toggle');
+      if (toggle) toggle.style.display = 'none';
+      var bn = document.querySelector('.brand-name');
+      if (bn) bn.textContent = BRAND;
+      document.title = BRAND + ' — Influencer Intelligence';
+      var def = document.querySelector('.menu-item[data-tab="' + DEFAULT_TAB + '"]');
+      if (def) def.click();
+    }
+    window.addEventListener('load', function () { setTimeout(apply, 200); });
+  })();
+  </script>
+  <style id="cx-iq-theme">
+    /* Creatrix IQ — indigo "intelligence" accent, distinct from the full platform's sky-blue. */
+    :root { --blue: #4F46E5; --blue-deep: #4338CA; --blue-soft: #EEF1FF; }
+    .brand-name { color: #4F46E5 !important; }
+    .nav-group-label { color: #6366F1 !important; letter-spacing: .14em; }
+    .sidebar-menu .menu-item.active { box-shadow: inset 3px 0 0 #4F46E5; }
+    .sidebar { background: linear-gradient(180deg, #f7f8ff 0%, #ffffff 60%); }
+    #ratecard-grid .rc-card { background:#fff;border:1px solid var(--border,#e6e8ef);border-radius:14px;padding:16px; }
+    #ratecard-grid .rc-card .rc-name { font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.06em; }
+    #ratecard-grid .rc-card .rc-price { font-size:22px;font-weight:800;color:#4F46E5;margin-top:6px; }
+    #ratecard-grid .rc-card .rc-range { font-size:12px;color:#94a3b8;font-family:var(--font-mono,monospace);margin-top:2px; }
+  </style>
+  <!-- ── Rate Card (Creatrix IQ exclusive): real reach → sponsorship pricing ── -->
+  <script>
+  (function () {
+    var ACTIVE_KEY = 'creatrix_active_company';
+    function readActive() {
+      try { return JSON.parse(localStorage.getItem(ACTIVE_KEY) || 'null'); } catch (_) { return null; }
+    }
+    function money(n) {
+      if (n >= 1000) return '$' + (Math.round(n / 100) / 10).toFixed(1) + 'K';
+      return '$' + Math.round(n);
+    }
+    function deliverables(followers, eng) {
+      // Heuristic blend of reach + engagement quality, in USD.
+      var base = (followers / 1000) * (8 + eng * 1.5);
+      return [
+        { name: 'Feed Post', mult: 1.0 },
+        { name: 'Story (3 frames)', mult: 0.45 },
+        { name: 'Reel / Short', mult: 1.8 },
+        { name: 'UGC + Usage Rights', mult: 3.2 },
+        { name: 'Monthly Retainer', mult: 5.4 }
+      ].map(function (d) {
+        var mid = base * d.mult;
+        return { name: d.name, low: mid * 0.82, high: mid * 1.18, mid: mid };
+      });
+    }
+    function render(handle, platform, followers, eng, real) {
+      var grid = document.getElementById('ratecard-grid');
+      var meta = document.getElementById('ratecard-meta');
+      if (!grid) return;
+      if (meta) {
+        meta.textContent = (real ? 'LIVE · ' : 'ESTIMATED · ') + (handle || 'creator') +
+          ' · ' + Math.round(followers).toLocaleString() + ' followers · ' + eng + '% engagement';
+      }
+      grid.innerHTML = deliverables(followers, eng).map(function (d) {
+        return '<div class="rc-card"><div class="rc-name">' + d.name + '</div>' +
+          '<div class="rc-price">' + money(d.mid) + '</div>' +
+          '<div class="rc-range">' + money(d.low) + ' – ' + money(d.high) + '</div></div>';
+      }).join('');
+    }
+    function fromActive() {
+      var rec = readActive();
+      if (rec && rec.data && rec.data.metrics) {
+        var m = rec.data.metrics;
+        var inp = document.getElementById('ratecard-handle');
+        if (inp && !inp.value) inp.value = rec.handle || '';
+        render(rec.handle, rec.platform, m.followers || 0, m.engagement_rate || 0, !!rec.data.is_real);
+        return true;
+      }
+      return false;
+    }
+    async function build() {
+      var inp = document.getElementById('ratecard-handle');
+      var btn = document.getElementById('btn-ratecard');
+      var rec = readActive();
+      var handle = (inp && inp.value.trim()) || (rec && rec.handle) || '';
+      if (!handle) { if (fromActive()) return; }
+      var platform = (rec && rec.platform) || 'instagram';
+      if (btn) { btn.disabled = true; btn.textContent = 'Building…'; }
+      try {
+        var r = await fetch((window.API_BASE || 'http://localhost:8080') + '/api/v1/influencer/analyze', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ handle: handle, platform: platform })
+        });
+        var d = r.ok ? await r.json() : null;
+        if (d && d.metrics) {
+          render(d.handle || handle, platform, d.metrics.followers || 0, d.metrics.engagement_rate || 0, !!d.is_real);
+        } else if (!fromActive()) {
+          render(handle, platform, 100000, 3.0, false);
+        }
+      } catch (_) {
+        if (!fromActive()) render(handle, platform, 100000, 3.0, false);
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Build Rate Card'; }
+      }
+    }
+    window.addEventListener('load', function () {
+      var btn = document.getElementById('btn-ratecard');
+      if (btn) btn.addEventListener('click', build);
+      // Auto-fill from the analyzed creator the first time the tab is opened.
+      var item = document.querySelector('.menu-item[data-tab="ratecard"]');
+      if (item) item.addEventListener('click', function () { setTimeout(fromActive, 60); });
+    });
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - us-central1-docker.pkg.dev/mediflow-nexus-2026/creatrix-ai/backend:$COMMIT_SHA
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - us-central1-docker.pkg.dev/mediflow-nexus-2026/creatrix-ai/backend:$COMMIT_SHA
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - creatrix-ai-backend
+      - --image=us-central1-docker.pkg.dev/mediflow-nexus-2026/creatrix-ai/backend:$COMMIT_SHA
+      - --platform=managed
+      - --region=us-central1
+      - --allow-unauthenticated
+      - --port=8080
+      - --memory=1Gi
+      - --cpu=1
+      - --min-instances=0
+      - --max-instances=3
+      - --set-env-vars=APP_ENV=production
+      - --project=mediflow-nexus-2026
+
+images:
+  - us-central1-docker.pkg.dev/mediflow-nexus-2026/creatrix-ai/backend:$COMMIT_SHA

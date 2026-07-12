@@ -1,0 +1,60 @@
+[
+  {
+    "handle": "@ankita.creates",
+    "platform": "instagram",
+    "ratefluencer_score": 94,
+    "authenticity_score": 91,
+    "growth_score": 88,
+    "brand_match_score": 94,
+    "details": {
+      "followers": "2.4M",
+      "engagement_rate": "6.8%",
+      "post_frequency": "4.2/wk",
+      "avg_views": "180K",
+      "risk_profile": "low",
+      "top_brand_matches": [
+        {"brand": "Nike", "score": 96},
+        {"brand": "Spotify", "score": 94},
+        {"brand": "Zara", "score": 88}
+      ]
+    }
+  },
+  {
+    "handle": "@rohit.startup",
+    "platform": "instagram",
+    "ratefluencer_score": 82,
+    "authenticity_score": 85,
+    "growth_score": 80,
+    "brand_match_score": 79,
+    "details": {
+      "followers": "780K",
+      "engagement_rate": "4.9%",
+      "post_frequency": "3.5/wk",
+      "avg_views": "60K",
+      "risk_profile": "low",
+      "top_brand_matches": [
+        {"brand": "Adidas", "score": 78},
+        {"brand": "Apple", "score": 71}
+      ]
+    }
+  },
+  {
+    "handle": "@priya.mindful",
+    "platform": "instagram",
+    "ratefluencer_score": 71,
+    "authenticity_score": 76,
+    "growth_score": 68,
+    "brand_match_score": 70,
+    "details": {
+      "followers": "120K",
+      "engagement_rate": "3.8%",
+      "post_frequency": "2.0/wk",
+      "avg_views": "15K",
+      "risk_profile": "medium",
+      "top_brand_matches": [
+        {"brand": "Sephora", "score": 82},
+        {"brand": "Zara", "score": 70}
+      ]
+    }
+  }
+]

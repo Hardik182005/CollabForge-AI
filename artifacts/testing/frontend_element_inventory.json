@@ -1,0 +1,88 @@
+{
+  "generated": "2026-07-12",
+  "scope": "E:/V3/CollabForge-AI/frontend (shipped SPA). legacy/ is archived and covered separately.",
+  "api_base_config": {
+    "file": "frontend/js/core/api-client.js",
+    "detectBase_logic": "localhost/127.0.0.1 -> http://localhost:8001; injected COLLABFORGE_BACKEND_URL (from config.js __BACKEND_URL__) if set; else same-origin (CloudFront proxy).",
+    "injection_point": "frontend/config.js line 4 window.COLLABFORGE_BACKEND_URL = \"__BACKEND_URL__\" (replaced at deploy).",
+    "hardcoded_prod_urls": "none (no App Runner/CloudFront/localhost:8080/GCP literals in shipped frontend)"
+  },
+  "pages": [
+    { "file": "index.html", "role": "Landing page", "scripts": ["config.js","formatters.js","events.js","storage.js","api-client.js","app-state.js","capabilities.js","ui-feedback.js","anakin-pipeline.js","chat-orb.js","landing.js"] },
+    { "file": "app.html", "role": "SPA workspace shell (Creator Studio + Brand Intelligence)", "scripts": ["config.js","core/*","anakin-pipeline.js","chat-orb.js","views/common.js","views/creator.js","views/brand.js","views/autopilot.js","shell.js"] },
+    { "file": "creator-studio.html", "role": "Redirect stub -> app.html?workspace=creator&view=trends" },
+    { "file": "brand-deal-desk.html", "role": "Redirect stub -> app.html?workspace=brand&view=discover" },
+    { "file": "collab-autopilot.html", "role": "Redirect stub -> app.html?workspace=brand&view=autopilot" },
+    { "file": "dashboard.html", "role": "Redirect stub -> app.html?workspace=creator&view=trends" }
+  ],
+  "deprecated_stub_files": ["script.js","orb.js","deal-desk.js","autopilot.js","style.css (all 1-3 line deprecation notices, no logic)"],
+  "route_manifest": {
+    "creator": {
+      "trends": "Trend Discovery", "selected-trend": "Selected Trend",
+      "scripts": "Script Studio", "hooks": "Hook Lab", "social": "Social Content Pack",
+      "voice": "Voice Studio", "reel": "Reel Builder",
+      "virality": "Virality Evaluation", "saved": "Saved Content"
+    },
+    "brand": {
+      "discover": "Discover Creators", "research": "Creator Research", "compare": "Compare Creators",
+      "campaign": "Campaign Planner", "roi": "ROI Scenarios", "outreach": "Outreach Studio", "contract": "Contract Builder",
+      "room": "Campaign Room", "autopilot": "Collab Autopilot"
+    }
+  },
+  "interactive_elements_by_view": {
+    "landing": ["nav links","mobile burger+drawer","hero CTAs","demo query input","4 demo-example buttons (labelled, live-trigger)","Run Live Pipeline button","pipeline mount (SSE-driven nodes)","chat orb"],
+    "creator/trends": ["#t-topic input","#t-cat select","#t-go Discover button","per-result Source link + Use Trend button"],
+    "creator/scripts": ["#s-topic input","#s-dur select","#s-style select","#s-go button","Send to Voice / Send to Reel buttons"],
+    "creator/hooks": ["#h-topic input","#h-go button"],
+    "creator/social": ["#p-topic input","#p-go button"],
+    "creator/voice": ["#v-text textarea","#v-voice select (populated from /media/voices)","#v-go button","audio player","Download MP3"],
+    "creator/reel": ["#r-text textarea","#r-go button","per-scene Download frame"],
+    "creator/virality": ["#e-text textarea","#e-plat select","#e-go button"],
+    "brand/discover": ["#d-q input","#d-research button","#d-tg demo chip (labelled)","#d-topic input","#d-go button","per-result Research button"],
+    "brand/research": ["#r-q input","#r-go button","Add to shortlist / Compare / Use in Campaign buttons","evidence source links"],
+    "brand/compare": ["#c-list input","#c-go button","comparison table"],
+    "brand/campaign": ["#b-url/#b-name/#b-ctx inputs","#b-go Analyze button","Generate Brief / Draft Outreach buttons","copy controls"],
+    "brand/roi": ["6 numeric inputs","#roi-go button","ROI table"],
+    "brand/outreach": ["#o-goal/#o-deliv inputs","#o-go button","copy blocks"],
+    "brand/contract": ["#k-brand/#k-creator/#k-comp/#k-deliv inputs","#k-go button","doc block + copy"],
+    "brand/room": ["Save current context button","campaign cards"],
+    "brand/autopilot": ["6-step wizard (inputs/textarea/segmented strategy)","creator chips add/remove","Back/Next/Launch","10-stage SSE pipeline","Save to Campaign Room"],
+    "global": ["Forge chat orb: open/close, voice toggle, mic (STT), send, 3 suggestion chips"]
+  },
+  "endpoint_cross_check": {
+    "result": "PASS - all 21 distinct frontend calls resolve to a registered backend route",
+    "calls": [
+      { "call": "GET /api/v1/system/capabilities", "route": "system.py", "status": "ok" },
+      { "call": "POST/GET /api/v1/pipeline/preview/stream", "route": "pipeline.py", "status": "ok" },
+      { "call": "POST /api/v1/trends/discover", "route": "trends.py", "status": "ok" },
+      { "call": "POST /api/v1/content/generate-script", "route": "content.py", "status": "ok" },
+      { "call": "POST /api/v1/content/hooks", "route": "content.py", "status": "ok" },
+      { "call": "POST /api/v1/content/pack", "route": "content.py", "status": "ok" },
+      { "call": "GET /api/v1/media/voices", "route": "media.py", "status": "ok" },
+      { "call": "POST /api/v1/media/voice", "route": "media.py", "status": "ok" },
+      { "call": "POST /api/v1/media/reel", "route": "media.py", "status": "ok" },
+      { "call": "POST /api/v1/virality/predict", "route": "virality.py", "status": "ok" },
+      { "call": "POST /api/v1/chat/", "route": "chat.py", "status": "ok" },
+      { "call": "POST /api/v1/creators/discover", "route": "creator_research.py", "status": "ok" },
+      { "call": "POST /api/v1/creators/research", "route": "creator_research.py", "status": "ok" },
+      { "call": "POST /api/v1/creators/compare", "route": "creator_compare.py", "status": "ok" },
+      { "call": "POST /api/v1/business/analyze", "route": "business.py", "status": "ok" },
+      { "call": "POST /api/v1/campaigns/brief", "route": "campaigns.py", "status": "ok" },
+      { "call": "POST /api/v1/campaigns/roi-scenario", "route": "campaigns.py", "status": "ok" },
+      { "call": "POST /api/v1/campaigns/outreach", "route": "campaigns.py", "status": "ok" },
+      { "call": "POST /api/v1/campaigns/contract", "route": "campaigns.py", "status": "ok" },
+      { "call": "GET/POST /api/v1/campaigns", "route": "campaigns.py", "status": "ok" },
+      { "call": "POST /api/v1/autopilot/run (SSE)", "route": "autopilot.py", "status": "ok" }
+    ],
+    "broken_endpoint_buttons": [],
+    "missing_handlers": [],
+    "backend_routes_not_used_by_ui": [
+      "/api/v1/reports (GET), /api/v1/reports/save, /api/v1/reports/library, /api/v1/reports/library/save",
+      "/api/v1/creators/reputation, /api/v1/creators/sponsor-history, /api/v1/creators/rate-estimate",
+      "/api/v1/content/predict-virality, /api/v1/content/linkedin, /api/v1/content/instagram, /api/v1/content/instagram-image",
+      "/api/v1/trends/categories, /api/v1/trends/{id}",
+      "/api/v1/virality/voiceover, /api/v1/virality/voices",
+      "note: extra backend capability, not a UI defect"
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+/* CollabForge AI — loading / empty / error / badges / toasts / warnings */
+.cf-loading { display: flex; align-items: center; gap: var(--space-3); color: var(--color-text-muted); padding: var(--space-7); font-size: var(--text-sm); justify-content: center; }
+.cf-spinner { width: 18px; height: 18px; border: 2px solid var(--color-accent-line); border-top-color: var(--color-accent); border-radius: 50%; animation: cf-spin 0.7s linear infinite; }
+@keyframes cf-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .cf-spinner { animation-duration: 1.6s; } }
+
+.cf-state { text-align: center; padding: var(--space-8) var(--space-5); border: 1px dashed var(--color-border); border-radius: var(--radius-md); background: var(--color-canvas-alt); }
+.cf-state h4 { margin-bottom: var(--space-2); }
+.cf-state p { color: var(--color-text-muted); font-size: var(--text-sm); }
+.cf-state--error { border-color: var(--color-error); background: var(--color-error-soft); }
+.cf-state--error h4 { color: var(--color-error); }
+
+.cf-warnings { display: flex; flex-direction: column; gap: var(--space-2); margin: var(--space-3) 0; }
+.cf-warning { display: flex; align-items: center; gap: var(--space-2); background: var(--color-warning-soft); color: var(--color-partial); border: 1px solid #EBD9B4; border-radius: var(--radius-sm); padding: var(--space-2) var(--space-3); font-size: var(--text-sm); }
+.cf-warning__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-warning); flex: none; }
+
+/* Source / provider badges */
+.cf-badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 500; letter-spacing: 0.02em; padding: 3px 9px; border-radius: var(--radius-pill); border: 1px solid transparent; white-space: nowrap; }
+.cf-badge__conf { opacity: 0.7; text-transform: capitalize; }
+.cf-badge--wire   { background: var(--color-accent-soft); color: var(--color-accent-strong); border-color: var(--color-accent-line); }
+.cf-badge--scrape { background: var(--color-live-soft); color: #14795A; border-color: #BEE6D5; }
+.cf-badge--search { background: #EAEEF4; color: #3B4A5E; border-color: #D3DCE8; }
+.cf-badge--api    { background: #EDEBE4; color: #5A5346; border-color: var(--color-border); }
+.cf-badge--est    { background: var(--color-warning-soft); color: var(--color-partial); border-color: #EBD9B4; }
+
+.cf-conf { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-xs); font-weight: 600; padding: 2px 8px; border-radius: var(--radius-pill); }
+.cf-conf::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.cf-conf--high   { background: var(--color-live-soft); color: #14795A; }
+.cf-conf--medium { background: var(--color-accent-soft); color: var(--color-accent-strong); }
+.cf-conf--low    { background: var(--color-warning-soft); color: var(--color-partial); }
+.cf-conf--unknown{ background: #ECECEC; color: var(--color-text-muted); }
+
+/* Live status dot */
+.cf-live { display: inline-flex; align-items: center; gap: 7px; font-size: var(--text-xs); font-weight: 600; color: var(--color-text-secondary); }
+.cf-live__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-text-muted); flex: none; }
+.cf-live.is-live .cf-live__dot { background: var(--color-live); box-shadow: 0 0 0 0 var(--color-live); animation: cf-pulse 2s infinite; }
+.cf-live.is-down .cf-live__dot { background: var(--color-warning); }
+@keyframes cf-pulse { 0% { box-shadow: 0 0 0 0 rgba(30,158,106,0.4); } 70% { box-shadow: 0 0 0 6px rgba(30,158,106,0); } 100% { box-shadow: 0 0 0 0 rgba(30,158,106,0); } }
+@media (prefers-reduced-motion: reduce) { .cf-live.is-live .cf-live__dot { animation: none; } }
+
+/* Toasts */
+.cf-toast-host { position: fixed; bottom: var(--space-5); right: var(--space-5); display: flex; flex-direction: column; gap: var(--space-2); z-index: 1000; }
+.cf-toast { background: var(--color-surface-dark); color: var(--color-text-invert); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); box-shadow: var(--shadow-elevated); font-size: var(--text-sm); opacity: 0; transform: translateY(8px); transition: var(--transition); max-width: 320px; }
+.cf-toast.is-in { opacity: 1; transform: translateY(0); }
+.cf-toast--error { background: var(--color-error); }
+.cf-toast--success { background: var(--color-live); }

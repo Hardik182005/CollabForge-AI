@@ -1,0 +1,26 @@
+{
+  "hosting": {
+    "site": "creatrix-studio",
+    "public": "frontend",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "run": {
+          "serviceId": "creatrix-studio",
+          "region": "us-central1"
+        }
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(js|css)",
+        "headers": [{"key": "Cache-Control", "value": "max-age=31536000"}]
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "generated": "2026-07-12",
+  "status": "PLACEHOLDER - to be filled during a live browser run",
+  "note": "Static analysis only. Populate 'requests' by driving each view against a live backend.",
+  "api_base_resolution": {
+    "localhost": "http://localhost:8001",
+    "injected": "window.COLLABFORGE_BACKEND_URL when config.js __BACKEND_URL__ is replaced at deploy",
+    "default": "same-origin (CloudFront proxies /api/* to backend)"
+  },
+  "requests": [
+    {
+      "view": "",
+      "method": "",
+      "url": "",
+      "status": null,
+      "ok": null,
+      "ms": null,
+      "error": ""
+    }
+  ],
+  "static_expectations": [
+    "Every request targets BASE + /api/v1/*. No cross-origin third-party API calls from the browser (Anakin/OpenAI/ElevenLabs are all server-side).",
+    "SSE endpoints: /api/v1/pipeline/preview/stream and /api/v1/autopilot/run (text/event-stream).",
+    "On network failure api-client returns {success:false,error:{code:NETWORK}} and the UI shows a retry-able error state - no uncaught rejections."
+  ]
+}

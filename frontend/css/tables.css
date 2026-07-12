@@ -1,0 +1,16 @@
+/* CollabForge AI — tables (comparison, ROI, score breakdown) */
+.table-wrap { overflow-x: auto; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); }
+table.cf-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); min-width: 520px; }
+.cf-table th, .cf-table td { text-align: left; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--color-border-soft); }
+.cf-table thead th { font-family: var(--font-mono); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-muted); font-weight: 500; background: var(--color-canvas-alt); }
+.cf-table tbody tr:last-child td { border-bottom: none; }
+.cf-table tbody tr:hover { background: var(--color-canvas-alt); }
+.cf-table td.num, .cf-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.cf-table .row-strong { font-weight: 600; color: var(--color-text-primary); }
+
+/* Score breakdown bars */
+.score-bar { display: grid; grid-template-columns: 1fr 60px; gap: var(--space-3); align-items: center; margin-bottom: var(--space-3); }
+.score-bar__track { height: 8px; background: var(--color-canvas-alt); border-radius: var(--radius-pill); overflow: hidden; border: 1px solid var(--color-border-soft); }
+.score-bar__fill { height: 100%; background: var(--color-accent); border-radius: var(--radius-pill); }
+.score-bar__label { display: flex; justify-content: space-between; font-size: var(--text-sm); margin-bottom: 4px; }
+.score-bar__missing .score-bar__fill { background: repeating-linear-gradient(45deg, #DEDAD1, #DEDAD1 4px, #EFEBE2 4px, #EFEBE2 8px); }

@@ -1,0 +1,35 @@
+{
+  "date": "2026-07-12",
+  "verdict": "PASS WITH APPROVED NON-BLOCKING EXCEPTIONS",
+  "frontend_url": "https://d2l3jsjzyhefqq.cloudfront.net",
+  "backend": "ECS Fargate collabforge-backend taskDef:8 via ALB collabforge-alb (same-origin /api proxy)",
+  "aws": {"account": "824604027501", "region": "eu-west-1", "user": "fundflow-deployer"},
+  "health": "200 ok",
+  "anakin": {
+    "key_migration": "complete; new key sole ANAKIN_API_KEY (****9b9d), active local + AWS, no old key in config, no value exposed",
+    "scraper": "LIVE",
+    "search": "LIVE (two distinct queries return disjoint real URLs)",
+    "wire": "DEGRADED upstream (provider-side EXECUTION_FAILED); honestly reported, not faked",
+    "mcp_runtime_dependency": false,
+    "estimated_credits_used": "~4-8"
+  },
+  "api_routes": {"total": 37, "pass": 37, "expected_4xx": "handled (400/422/404/413)", "failed": 0, "pytest": "39 passed / 0 failed"},
+  "pipeline_sse": "PASS (text/event-stream, 7 incremental events, backend-driven)",
+  "chatbot_orb": "PASS (POST /api/v1/chat/ 200, accurate reply, no console errors)",
+  "frontend": {"broken_endpoint_buttons": 0, "secrets_in_bundle": false, "fake_data_shown_as_live": false, "console_errors_on_smoke": 0},
+  "security": "PASS (SSRF/path-traversal/xss-escape/log-redaction/ffmpeg-arg-safety); FRONTEND_ORIGINS corrected",
+  "deploy": {
+    "backend": "rebuilt with ffmpeg + new key + FRONTEND_ORIGINS=cloudfront; taskDef:8 rollout COMPLETED; capabilities ffmpeg=true",
+    "frontend": "S3 sync + CloudFront invalidation I1HD0AFDGVCDT40NJIXVJ2ES3U (Completed)"
+  },
+  "defects": {"p0": 0, "p1": 0, "p2": ["secrets in ECS task-def env (recommend Secrets Manager)", "rate limiter per-process"], "p3": ["no CDN security headers"]},
+  "non_blocking_exceptions": ["Anakin Wire upstream degradation (external, honestly reported)"],
+  "confirmations": {
+    "no_secrets_committed": true,
+    "no_old_anakin_key_in_config": true,
+    "no_firebase_gcp_runtime": true,
+    "production_independent_of_mcp": true,
+    "no_static_results_as_live": true,
+    "no_fake_provider_status": true
+  }
+}
